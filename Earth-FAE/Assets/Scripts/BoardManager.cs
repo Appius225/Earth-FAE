@@ -15,6 +15,9 @@ public class BoardManager : MonoBehaviour
     private GameObject[,] objectPositions;
     private Transform boardContainer;
 
+    Camera MainCamera;
+    public static Vector3 screenCenter;
+
     private static Dictionary<string, int> tileToIntMap = new Dictionary<string, int>()
     {
         { "N", 0 },
@@ -53,19 +56,19 @@ public class BoardManager : MonoBehaviour
             columns = dimensions[0];
             rows = dimensions[1];
             objectPositions = new GameObject[rows, columns];
-            Debug.Log(columns);
-            Debug.Log(rows);
+            // Debug.Log(columns);
+            // Debug.Log(rows);
             for(int i = 0; i < columns; i++)
             {
                 string[] row = cfgIn.ReadLine().Split(',');
-                foreach(var item in row)
-                {
-                    Debug.Log(item);
-                }
+                // foreach(var item in row)
+                // {
+                //     Debug.Log(item);
+                // }
                 
                 for(int j = 0; j < rows; j++)
                 {
-                    objectPositions[i,j] = tilePrefabs[tileToIntMap[row[j]]];
+                    objectPositions[j,i] = tilePrefabs[tileToIntMap[row[j]]];
                 }
             }
         }
@@ -82,6 +85,14 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+
+        float new_x = (rows / 2) + (rows % 2 == 0 ? 0.5f : 0.0f); // for camera centering; this one is exact center
+        float new_y = (columns / 2) - ((columns / 2) * .25f);     // for camera centering; this one should be close enough
+
+        screenCenter = new Vector3(new_x, new_y, -10.0f);
+
+        //Debug.Log(new_x);
+        //Debug.Log(new_y);
     }
 
     void InitializeGrid()
@@ -92,8 +103,8 @@ public class BoardManager : MonoBehaviour
         {
             for (int y = 0; y < rows; y++)
             {
-                if (x % 2 == 1) hexGridPositions.Add(new Vector3(x + 0.5f, y - ( y * .25f ), 0f));
-                else hexGridPositions.Add(new Vector3(x, y - (y * .25f), 0f));
+                if (x % 2 == 1) hexGridPositions.Add(new Vector3(x + 0.5f, y - ( y * .25f ), 0.0f));
+                else hexGridPositions.Add(new Vector3(x, y - (y * .25f), 0.0f));
             }
         }
     }
@@ -109,9 +120,9 @@ public class BoardManager : MonoBehaviour
                 GameObject toInstantiate = objectPositions[x, y];
                 GameObject instance = null;
                 if (y % 2 == 1) instance =
-                    Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0f), Quaternion.identity) as GameObject;
+                    Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
                 else instance =
-                    Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0f), Quaternion.identity) as GameObject;
+                    Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
 
                 instance.transform.SetParent(boardContainer);
             }
@@ -123,5 +134,8 @@ public class BoardManager : MonoBehaviour
         FillObjectPositions();
         InitializeGrid();
         BoardSetup();
+        MainCamera = Camera.main;
+
+        MainCamera.transform.position = screenCenter;
     }
 }
