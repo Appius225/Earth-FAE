@@ -15,6 +15,34 @@ public class BoardManager : MonoBehaviour
     private GameObject[,] objectPositions;
     private Transform boardContainer;
 
+    private static Dictionary<string, int> tileToIntMap = new Dictionary<string, int>()
+    {
+        { "N", 0 },
+        { "D", 1 },
+        { "G", 2 }
+    };
+
+    /*
+     *  This function takes the member cfgNum and tries to load a board config from it
+     *  The board config template is specified in the member cfgFileTemplate
+     *  If a valid board cfg is not found with the specified cfgNum then
+     *  a default map will be loaded.
+     *  
+     *  Valid cfg looks as follows:
+     *  4,4
+     *  0,0,0,0
+     *  0,0,0,0
+     *  0,0,0,0
+     *  0,0,0,0
+     *  
+     *  where 4,4 are the x,y dimensions
+     *  and the objects in the grid define the type of tile in that position
+     *  
+     *  N = null tile
+     *  D = dirt tile
+     *  G = grass tile
+     *  ...
+     */
     void FillObjectPositions()
     {
         string cfgPath = cfgFileTemplate.Replace("X", cfgNum.ToString());
@@ -24,16 +52,25 @@ public class BoardManager : MonoBehaviour
             int[] dimensions = Array.ConvertAll<string, int>(cfgIn.ReadLine().Split(','), int.Parse);
             columns = dimensions[0];
             rows = dimensions[1];
-            objectPositions = new GameObject[dimensions[0], dimensions[1]];
-
-            for(int i = 0; i < dimensions[0]; i++) {
+            objectPositions = new GameObject[rows, columns];
+            Debug.Log(columns);
+            Debug.Log(rows);
+            for(int i = 0; i < columns; i++)
+            {
                 string[] row = cfgIn.ReadLine().Split(',');
-                for(int j = 0; j < dimensions[1]; j++)
+                foreach(var item in row)
                 {
-                    objectPositions[i,j] = tilePrefabs[int.Parse(row[j])];
+                    Debug.Log(item);
+                }
+                
+                for(int j = 0; j < rows; j++)
+                {
+                    objectPositions[i,j] = tilePrefabs[tileToIntMap[row[j]]];
                 }
             }
-        } else {
+        }
+        else
+        {
             objectPositions = new GameObject[columns, rows];
 
             for (int i = 0; i < columns; i++)
