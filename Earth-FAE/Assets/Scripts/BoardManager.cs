@@ -7,6 +7,7 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     public GameObject[] tilePrefabs;
+    public GameObject tank;
     public int cfgNum;
     private int columns = 15;
     private int rows = 10;
@@ -15,6 +16,7 @@ public class BoardManager : MonoBehaviour
     private GameObject[,] objectPositions;
     private Transform boardContainer;
     public GameObject[,] objects;
+    public Boolean spawned = false;
 
     Camera MainCamera;
     public static Vector3 screenCenter;
@@ -130,6 +132,25 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    IEnumerator testTankSpawn()
+    {
+        GameObject instance = Instantiate(tilePrefabs[3], new Vector3(0.0f, 0.0f, -0.1f), Quaternion.identity) as GameObject;
+        while (!spawned)
+        {
+            yield return null;
+        }
+        Vector3 start = new Vector3(-4.0f, 0.0f, -0.1f);
+        instance = Instantiate(tank, start, Quaternion.identity) as GameObject;
+        float elapsedTime = 0.0f;
+        while(elapsedTime < 1)
+        {
+            instance.transform.position = Vector3.Lerp(start, new Vector3(0.0f, 0.0f, -0.1f), (elapsedTime / 1));
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        instance.transform.position = new Vector3(0.0f, 0.0f, -0.1f);
+    }
+
     void Awake()
     {
         FillObjectPositions();
@@ -139,5 +160,7 @@ public class BoardManager : MonoBehaviour
 
         MainCamera.transform.position = screenCenter;
         MainCamera.orthographicSize = 2.5f;
+
+        StartCoroutine(testTankSpawn());
     }
 }
