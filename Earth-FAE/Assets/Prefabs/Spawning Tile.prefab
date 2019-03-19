@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!60 &2036832951902465879
+--- !u!60 &6879960317465390884
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18,19 +18,19 @@ PolygonCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1, y: 1}
-    newSize: {x: 0.64, y: 0.64}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.0037989616, y: 0.49628377}
-      - {x: -0.48513484, y: 0.23817396}
-      - {x: -0.48513484, y: -0.24856305}
-      - {x: 0.0027914047, y: -0.49256742}
-      - {x: 0.49063516, y: -0.25472367}
-      - {x: 0.4925666, y: 0.24866796}
+    - - {x: 0, y: 0.48505294}
+      - {x: -0.47672677, y: 0.23826337}
+      - {x: -0.47418296, y: -0.24421406}
+      - {x: -0.002636671, y: -0.4826237}
+      - {x: 0.47672653, y: -0.23488832}
+      - {x: 0.47672653, y: 0.2419312}
 --- !u!114 &8936672517338518827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,7 +53,7 @@ PrefabInstance:
     - target: {fileID: 743855925630952665, guid: a69fe1ff6eb2efb49b249c035657e668,
         type: 3}
       propertyPath: m_Name
-      value: GrassTile Variant
+      value: Spawning Tile
       objectReference: {fileID: 0}
     - target: {fileID: 8453897189725431903, guid: a69fe1ff6eb2efb49b249c035657e668,
         type: 3}
@@ -110,7 +110,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 1019095473712487262, guid: a69fe1ff6eb2efb49b249c035657e668,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d630178a0deea104e85fad1c20d6cbcc,
+        type: 3}
+    - target: {fileID: 1019095473712487262, guid: a69fe1ff6eb2efb49b249c035657e668,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1019095473712487262, guid: a69fe1ff6eb2efb49b249c035657e668,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 743855925630952666, guid: a69fe1ff6eb2efb49b249c035657e668, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a69fe1ff6eb2efb49b249c035657e668, type: 3}
 --- !u!1 &4472966101420188593 stripped
 GameObject:
