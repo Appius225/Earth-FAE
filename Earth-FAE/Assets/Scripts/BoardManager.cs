@@ -28,7 +28,8 @@ public class BoardManager : MonoBehaviour
     {
         { "N", 0 },
         { "D", 1 },
-        { "G", 2 }
+        { "G", 2 },
+        { "W", 3 }
     };
 
     /*
@@ -93,10 +94,10 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        float new_x = (rows / 2) + (rows % 2 == 0 ? 0.5f : 0.0f); // for camera centering; this one is exact center
-        float new_y = (columns / 2) - ((columns / 2) * .25f);     // for camera centering; this one should be close enough
+        float new_x = ((columns / 2) - 1.0f) + (columns % 2 == 0 ? 0.5f : 1.0f); //new calculation for camera
+        float new_y = ((rows / 2) - 1.0f) - (((rows / 2) - 1.0f) * .25f) + 0.5f;     // for camera centering; this one should be close enough
 
-        screenCenter = new Vector3(new_x, new_y, -10f);
+        screenCenter = new Vector3(new_x, new_y, -10.0f);
 
         //Debug.Log(new_x);
         //Debug.Log(new_y);
@@ -188,7 +189,7 @@ public class BoardManager : MonoBehaviour
         MainCamera = Camera.main;
 
         MainCamera.transform.position = screenCenter;
-        MainCamera.orthographicSize = 2.5f;
+        MainCamera.orthographicSize = ((rows - (rows * .25f)) / 2.0f) + 1.0f; // calculate the size of the camera
 
         StartCoroutine(testTankSpawn());
     }
