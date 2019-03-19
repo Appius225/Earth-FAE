@@ -250,8 +250,27 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
+      propertyPath: tilePrefabs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
       propertyPath: cfgNum
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
+      propertyPath: tilePrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 4472966101420188593, guid: bad13ef1da1d24047b8edda560df89d0,
+        type: 3}
+    - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
+      propertyPath: tank
+      value: 
+      objectReference: {fileID: 6443491495700026576, guid: 9827ca524e8d93243b07921fbc7f374a,
+        type: 3}
+    - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
+      propertyPath: red
+      value: 
+      objectReference: {fileID: 4472966101420188593, guid: bad13ef1da1d24047b8edda560df89d0,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}

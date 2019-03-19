@@ -8,6 +8,10 @@ public class BoardManager : MonoBehaviour
 {
     public GameObject[] tilePrefabs;
     public GameObject tank;
+    public GameObject red;
+    public Boolean spawned = false;
+    public Vector3[] spawnPos = new Vector3[3];
+    private GameObject[] tanks = new GameObject[3];
     public int cfgNum;
     private int columns = 15;
     private int rows = 10;
@@ -16,7 +20,6 @@ public class BoardManager : MonoBehaviour
     private GameObject[,] objectPositions;
     private Transform boardContainer;
     public GameObject[,] objects;
-    public Boolean spawned = false;
 
     Camera MainCamera;
     public static Vector3 screenCenter;
@@ -134,21 +137,47 @@ public class BoardManager : MonoBehaviour
 
     IEnumerator testTankSpawn()
     {
-        GameObject instance = Instantiate(tilePrefabs[3], new Vector3(0.0f, 0.0f, -0.1f), Quaternion.identity) as GameObject;
-        while (!spawned)
+        GameObject[,] spawnable = new GameObject[2, rows];
+        for(int x = 0; x < 2; x++)
         {
-            yield return null;
+            for(int y = 0; y < rows; y++)
+            {
+                if (y % 2 == 1 && x != 1)
+                    spawnable[x, y] = Instantiate(red, new Vector3(x + 0.5f, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
+                else if (!(y%2==1 && x==1))
+                    spawnable[x, y] = Instantiate(red, new Vector3(x, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
+            }
         }
-        Vector3 start = new Vector3(-4.0f, 0.0f, -0.1f);
-        instance = Instantiate(tank, start, Quaternion.identity) as GameObject;
-        float elapsedTime = 0.0f;
-        while(elapsedTime < 1)
+        Vector3 def = new Vector3(0.0f, 0.0f, 0.0f);
+        while (spawnPos[0] == def || spawnPos[1] == def || spawnPos[2] == def) 
         {
-            instance.transform.position = Vector3.Lerp(start, new Vector3(0.0f, 0.0f, -0.1f), (elapsedTime / 1));
+            yield return new WaitForEndOfFrame();
+        }
+        for(int x = 0; x < 2; x++)
+        {
+            for(int y = 0; y < rows; y++)
+            {
+                Destroy(spawnable[x, y]);
+            }
+        }
+        Vector3[] startPos = new Vector3[3];
+        for(int i = 0; i < 3; i++)
+        {
+            startPos[i] = new Vector3(spawnPos[i].x - 5.0f,spawnPos[i].y,spawnPos[i].z);
+            tanks[i] = Instantiate(tank,startPos[i],Quaternion.identity) as GameObject;
+        }
+        float elapsedTime = 0.0f;
+        while (elapsedTime < 0.5f)
+        {
+            tanks[0].transform.position = Vector3.Lerp(startPos[0], spawnPos[0], (elapsedTime / 0.5f));
+            tanks[1].transform.position = Vector3.Lerp(startPos[1], spawnPos[1], (elapsedTime / 0.5f));
+            tanks[2].transform.position = Vector3.Lerp(startPos[2], spawnPos[2], (elapsedTime / 0.5f));
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        instance.transform.position = new Vector3(0.0f, 0.0f, -0.1f);
+        tanks[0].transform.position = spawnPos[0];
+        tanks[1].transform.position = spawnPos[1];
+        tanks[2].transform.position = spawnPos[2];
     }
 
     void Awake()
