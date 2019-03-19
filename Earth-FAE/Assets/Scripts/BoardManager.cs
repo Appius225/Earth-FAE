@@ -14,6 +14,7 @@ public class BoardManager : MonoBehaviour
     private List<Vector3> hexGridPositions = new List<Vector3>();
     private GameObject[,] objectPositions;
     private Transform boardContainer;
+    public GameObject[,] objects;
 
     Camera MainCamera;
     public static Vector3 screenCenter;
@@ -56,6 +57,7 @@ public class BoardManager : MonoBehaviour
             columns = dimensions[0];
             rows = dimensions[1];
             objectPositions = new GameObject[rows, columns];
+            objects = new GameObject[rows, columns];
             // Debug.Log(columns);
             // Debug.Log(rows);
             for(int i = 0; i < columns; i++)
@@ -89,7 +91,7 @@ public class BoardManager : MonoBehaviour
         float new_x = (rows / 2) + (rows % 2 == 0 ? 0.5f : 0.0f); // for camera centering; this one is exact center
         float new_y = (columns / 2) - ((columns / 2) * .25f);     // for camera centering; this one should be close enough
 
-        screenCenter = new Vector3(new_x, new_y, -10.0f);
+        screenCenter = new Vector3(new_x, new_y, -10f);
 
         //Debug.Log(new_x);
         //Debug.Log(new_y);
@@ -118,13 +120,12 @@ public class BoardManager : MonoBehaviour
             for (int y = 0; y < rows; y++)
             {
                 GameObject toInstantiate = objectPositions[x, y];
-                GameObject instance = null;
-                if (y % 2 == 1) instance =
-                    Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
-                else instance =
-                    Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
+                if (y % 2 == 1) 
+                    objects[x,y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
+                else 
+                    objects[x,y] = Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
 
-                instance.transform.SetParent(boardContainer);
+                objects[x,y].transform.SetParent(boardContainer);
             }
         }
     }
@@ -137,5 +138,6 @@ public class BoardManager : MonoBehaviour
         MainCamera = Camera.main;
 
         MainCamera.transform.position = screenCenter;
+        MainCamera.orthographicSize = 2.5f;
     }
 }
