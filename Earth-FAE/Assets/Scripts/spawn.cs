@@ -11,14 +11,17 @@ public class spawn : MonoBehaviour
         if (grid.spawnPos[0] == null || grid.spawnPos[0]==def)
         {
             grid.spawnPos[0] = this.transform.position;
+            gameObject.SetActive(false);
         }
         else if (grid.spawnPos[1] == null || grid.spawnPos[1]==def)
         {
             grid.spawnPos[1] = this.transform.position;
+            gameObject.SetActive(false);
         }
         else if (grid.spawnPos[2] == null || grid.spawnPos[2]==def)
         {
             grid.spawnPos[2] = this.transform.position;
+            gameObject.SetActive(false);
         }
     }
 }
