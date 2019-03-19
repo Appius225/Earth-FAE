@@ -10,6 +10,7 @@ public class BoardManager : MonoBehaviour
     public GameObject tank;
     public GameObject red;
     public Boolean spawned = false;
+    private Boolean initialized = false;
     public Vector3[] spawnPos = new Vector3[3];
     private GameObject[] tanks = new GameObject[3];
     public int cfgNum;
@@ -20,6 +21,9 @@ public class BoardManager : MonoBehaviour
     private GameObject[,] objectPositions;
     private Transform boardContainer;
     public GameObject[,] objects;
+
+    public Boolean turnEnded;
+    public GameObject endTurn;
 
     Camera MainCamera;
     public static Vector3 screenCenter;
@@ -179,6 +183,44 @@ public class BoardManager : MonoBehaviour
         tanks[0].transform.position = spawnPos[0];
         tanks[1].transform.position = spawnPos[1];
         tanks[2].transform.position = spawnPos[2];
+        initialized = true;
+    }
+
+    IEnumerator turn()
+    {
+        while (!initialized)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        GameObject endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+        for(int i = 0; i < 5; i++)
+        {
+            while (!turnEnded)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            Destroy(endButton);
+            fire();
+            enemyAttacks();
+            enemyMove();
+            if (i != 4)
+            {
+                turnEnded = false;
+                endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+            }
+        }
+    }
+    void fire()
+    {
+
+    }
+    void enemyAttacks()
+    {
+
+    }
+    void enemyMove()
+    {
+
     }
 
     void Awake()
@@ -192,5 +234,6 @@ public class BoardManager : MonoBehaviour
         MainCamera.orthographicSize = ((rows - (rows * .25f)) / 2.0f) + 1.0f; // calculate the size of the camera
 
         StartCoroutine(testTankSpawn());
+        StartCoroutine(turn());
     }
 }
