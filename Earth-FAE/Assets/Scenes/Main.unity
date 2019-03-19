@@ -203,7 +203,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1397779624, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
       propertyPath: m_Name
-      value: TestBoard
+      value: DemoBoard
       objectReference: {fileID: 0}
     - target: {fileID: 1397779625, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
       propertyPath: m_LocalPosition.x
