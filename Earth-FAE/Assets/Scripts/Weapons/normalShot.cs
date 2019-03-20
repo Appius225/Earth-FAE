@@ -21,28 +21,31 @@ public class normalShot : MonoBehaviour , Weapon
                 for(i = py + 1; i < grid.getRows(); i++)
                 {
                     tile = (grid.objects[tx, i].GetComponent(typeof(tileData)) as tileData);
-                    if (tile.city)
+                    if (tile != null)
                     {
-                        grid.cityHealth -= damage;
-                        if (grid.cityHealth <= 0)
+                        if (tile.city)
                         {
-                            //something something lose game
+                            grid.cityHealth -= damage;
+                            if (grid.cityHealth <= 0)
+                            {
+                                //something something lose game
+                            }
+                            //something something animation
+                            i = 100;
                         }
-                        //something something animation
-                        i = 100;
-                    }
-                    else if (tile.blocked) { i = 100; }
-                    else if (tile.enemy != null)
-                    {
-                        tile.enemy.damage(damage);
-                        //something something animation
-                        i = 100;
-                    }
-                    else if (tile.tank != null)
-                    {
-                        tile.tank.damage(damage);
-                        //something something animation
-                        i = 100;
+                        else if (tile.blocked) { i = 100; }
+                        else if (tile.enemy != null)
+                        {
+                            tile.enemy.damage(damage);
+                            //something something animation
+                            i = 100;
+                        }
+                        else if (tile.tank != null)
+                        {
+                            tile.tank.damage(damage);
+                            //something something animation
+                            i = 100;
+                        }
                     }
                 }
                 if (i != 100)
@@ -55,28 +58,31 @@ public class normalShot : MonoBehaviour , Weapon
                 for(i = py - 1; i >= 0; i++)
                 {
                     tile = (grid.objects[tx, i].GetComponent(typeof(tileData)) as tileData);
-                    if (tile.city)
+                    if (tile != null)
                     {
-                        grid.cityHealth -= damage;
-                        if (grid.cityHealth <= 0)
+                        if (tile.city)
                         {
-                            //something something lose game
+                            grid.cityHealth -= damage;
+                            if (grid.cityHealth <= 0)
+                            {
+                                //something something lose game
+                            }
+                            //something something animation
+                            i = -100;
                         }
-                        //something something animation
-                        i = -100;
-                    }
-                    else if (tile.blocked) { i = -100; }
-                    else if(tile.enemy != null)
-                    {
-                        tile.enemy.damage(damage);
-                        //something something animation
-                        i = -100;
-                    }
-                    else if(tile.tank != null)
-                    {
-                        tile.tank.damage(damage);
-                        //something something animation
-                        i = -100;
+                        else if (tile.blocked) { i = -100; }
+                        else if (tile.enemy != null)
+                        {
+                            tile.enemy.damage(damage);
+                            //something something animation
+                            i = -100;
+                        }
+                        else if (tile.tank != null)
+                        {
+                            tile.tank.damage(damage);
+                            //something something animation
+                            i = -100;
+                        }
                     }
                 }
                 if (i != -100)
@@ -89,31 +95,34 @@ public class normalShot : MonoBehaviour , Weapon
         {
             if (tx > px)
             {
-                for(i = px + 1; i < grid.getCol(); i++)
+                for(i = px + 1; i < grid.getCols(); i++)
                 {
                     tile = (grid.objects[i, ty].GetComponent(typeof(tileData)) as tileData);
-                    if (tile.city)
+                    if (tile != null)
                     {
-                        grid.cityHealth -= damage;
-                        if (grid.cityHealth <= 0)
+                        if (tile.city)
                         {
-                            //something something lose game
+                            grid.cityHealth -= damage;
+                            if (grid.cityHealth <= 0)
+                            {
+                                //something something lose game
+                            }
+                            //something something animation
+                            i = 100;
                         }
-                        //something something animation
-                        i = 100;
-                    }
-                    else if (tile.blocked) { i = 100; }
-                    else if (tile.enemy != null)
-                    {
-                        tile.enemy.damage(damage);
-                        //something something animation
-                        i = 100;
-                    }
-                    else if (tile.tank != null)
-                    {
-                        tile.tank.damage(damage);
-                        //something something animation
-                        i = 100;
+                        else if (tile.blocked) { i = 100; }
+                        else if (tile.enemy != null)
+                        {
+                            tile.enemy.damage(damage);
+                            //something something animation
+                            i = 100;
+                        }
+                        else if (tile.tank != null)
+                        {
+                            tile.tank.damage(damage);
+                            //something something animation
+                            i = 100;
+                        }
                     }
                 }
                 if (i != 100)
@@ -126,28 +135,31 @@ public class normalShot : MonoBehaviour , Weapon
                 for (i = px - 1; i >= 0; i++)
                 {
                     tile = (grid.objects[i, ty].GetComponent(typeof(tileData)) as tileData);
-                    if (tile.city)
+                    if (tile != null)
                     {
-                        grid.cityHealth -= damage;
-                        if (grid.cityHealth <= 0)
+                        if (tile.city)
                         {
-                            //something something lose game
+                            grid.cityHealth -= damage;
+                            if (grid.cityHealth <= 0)
+                            {
+                                //something something lose game
+                            }
+                            //something something animation
+                            i = -100;
                         }
-                        //something something animation
-                        i = -100;
-                    }
-                    else if (tile.blocked) { i = -100; }
-                    else if (tile.enemy != null)
-                    {
-                        tile.enemy.damage(damage);
-                        //something something animation
-                        i = -100;
-                    }
-                    else if (tile.tank != null)
-                    {
-                        tile.tank.damage(damage);
-                        //something something animation
-                        i = -100;
+                        else if (tile.blocked) { i = -100; }
+                        else if (tile.enemy != null)
+                        {
+                            tile.enemy.damage(damage);
+                            //something something animation
+                            i = -100;
+                        }
+                        else if (tile.tank != null)
+                        {
+                            tile.tank.damage(damage);
+                            //something something animation
+                            i = -100;
+                        }
                     }
                 }
                 if (i != -100)
@@ -162,31 +174,34 @@ public class normalShot : MonoBehaviour , Weapon
             {
                 i = px + 1;
                 int j = py - 1;
-                while (i < grid.getCol() && j >= 0)
+                while (i < grid.getCols() && j >= 0)
                 {
                     tile = (grid.objects[i, j].GetComponent(typeof(tileData)) as tileData);
-                    if (tile.city)
+                    if (tile != null)
                     {
-                        grid.cityHealth -= damage;
-                        if (grid.cityHealth <= 0)
+                        if (tile.city)
                         {
-                            //something something lose game
+                            grid.cityHealth -= damage;
+                            if (grid.cityHealth <= 0)
+                            {
+                                //something something lose game
+                            }
+                            //something something animation
+                            i = 100;
                         }
-                        //something something animation
-                        i = 100;
-                    }
-                    else if (tile.blocked) { i = 100; }
-                    else if (tile.enemy != null)
-                    {
-                        tile.enemy.damage(damage);
-                        //something something animation
-                        i = 100;
-                    }
-                    else if (tile.tank != null)
-                    {
-                        tile.tank.damage(damage);
-                        //something something animation
-                        i = 100;
+                        else if (tile.blocked) { i = 100; }
+                        else if (tile.enemy != null)
+                        {
+                            tile.enemy.damage(damage);
+                            //something something animation
+                            i = 100;
+                        }
+                        else if (tile.tank != null)
+                        {
+                            tile.tank.damage(damage);
+                            //something something animation
+                            i = 100;
+                        }
                     }
                     i++;
                     j--;
@@ -203,28 +218,31 @@ public class normalShot : MonoBehaviour , Weapon
                 while (i >= 0 && j < grid.getRows())
                 {
                     tile = (grid.objects[i, ty].GetComponent(typeof(tileData)) as tileData);
-                    if (tile.city)
+                    if (tile != null)
                     {
-                        grid.cityHealth -= damage;
-                        if (grid.cityHealth <= 0)
+                        if (tile.city)
                         {
-                            //something something lose game
+                            grid.cityHealth -= damage;
+                            if (grid.cityHealth <= 0)
+                            {
+                                //something something lose game
+                            }
+                            //something something animation
+                            i = -100;
                         }
-                        //something something animation
-                        i = -100;
-                    }
-                    else if (tile.blocked) { i = -100; }
-                    else if (tile.enemy != null)
-                    {
-                        tile.enemy.damage(damage);
-                        //something something animation
-                        i = -100;
-                    }
-                    else if (tile.tank != null)
-                    {
-                        tile.tank.damage(damage);
-                        //something something animation
-                        i = -100;
+                        else if (tile.blocked) { i = -100; }
+                        else if (tile.enemy != null)
+                        {
+                            tile.enemy.damage(damage);
+                            //something something animation
+                            i = -100;
+                        }
+                        else if (tile.tank != null)
+                        {
+                            tile.tank.damage(damage);
+                            //something something animation
+                            i = -100;
+                        }
                     }
                     i--;
                     j++;
@@ -235,5 +253,35 @@ public class normalShot : MonoBehaviour , Weapon
                 }
             }
         }
+    }
+    public bool[,] tilesHittable(Vector3 position)
+    {
+        BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
+        bool[,] hitTiles = new bool[grid.getRows(), grid.getCols()];
+        int x = (int)Mathf.Floor(position.x);
+        int y = (int)Mathf.Round(position.y / 0.75f);
+        for(int i = 0; i < hitTiles.GetLength(0); i++)
+        {
+            for(int j = 0; j < hitTiles.GetLength(1); j++)
+            {
+                if ((i - x) == 0)
+                {
+                    hitTiles[i, j] = true;
+                }
+                else if ((j - y) == 0)
+                {
+                    hitTiles[i, j] = true;
+                }
+                else if ((j - y) == -(i - x))
+                {
+                    hitTiles[i, j] = true;
+                }
+                else
+                {
+                    hitTiles[i, j] = false;
+                }
+            }
+        }
+        return hitTiles;
     }
 }

@@ -12,10 +12,34 @@ public class Tank : MonoBehaviour
     public bool onFire = false;
     private Weapon weap1;
     private Weapon weap2;
+    public GameObject greenTile;
+    private GameObject[,] moveTiles;
+    private bool moveTilesDisp = false;
+    public GameObject redTile;
+    private GameObject[,] hittableTiles;
+    private bool hitTilesDisp = false;
 
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (hitTilesDisp)
+            {
+                removeHitTiles();
+            }
+            else if (moveTilesDisp)
+            {
+                hideMoveableTiles();
+            }
+        }
+    }
     void Awake()
     {
         grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
+        hittableTiles = new GameObject[grid.getRows(), grid.getCols()];
+        moveTiles = new GameObject[grid.getRows(), grid.getCols()];
+        actions = maxActions;
+        weap1 = new normalShot();
     }
     void repair()
     {
@@ -32,27 +56,150 @@ public class Tank : MonoBehaviour
                 onFire = true;
         }
     }
-    void fire1(Vector3 target)
+    void showMovableTiles()
+    {
+        this.tag = "Moving";
+        float x = Mathf.Floor(this.transform.position.x);
+        float y = Mathf.Round(this.transform.position.y / 0.75f);
+        Vector3 pos = offToAxial(new Vector3(x, y, 0));
+        Vector3 tile;
+        for(int i = 0; i < moveTiles.GetLength(0); i++)
+        {
+            for(int j = 0; j < moveTiles.GetLength(1); j++)
+            {
+                tile = offToAxial(new Vector3(i, j, 0));
+                if (Mathf.Max(Mathf.Max(Mathf.Abs(tile.x - pos.x), Mathf.Abs(tile.y - pos.y)), Mathf.Abs(tile.z - pos.z)) < movement) ;
+                {
+                    if (j % 2 == 1)
+                    {
+                        moveTiles[i, j] = Instantiate(greenTile, new Vector3(i + 0.5f, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
+                    }
+                    else
+                    {
+                        moveTiles[i, j] = Instantiate(greenTile, new Vector3(i, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
+                    }
+                }
+            }
+        }
+    }
+    Vector3 offToAxial(Vector3 off)
+    {
+        Vector3 temp = new Vector3((off.x - Mathf.Floor(off.y / 2)), off.y, 0);
+        temp.z = 0 - temp.x - temp.y;
+        return temp;
+    }
+    public void hideMoveableTiles()
+    {
+        this.tag = "Untagged";
+        for(int i = 0; i < moveTiles.GetLength(0); i++)
+        {
+            for(int j = 0; j < moveTiles.GetLength(1); j++)
+            {
+                if (moveTiles[i, j] != null)
+                {
+                    Destroy(moveTiles[i, j]);
+                    moveTiles[i, j] = null;
+                }
+            }
+        }
+        moveTilesDisp = false;
+    }
+    void showHittableTiles1()
+    {
+        if(actions > 1)
+        {
+            this.tag = "Firing1";
+            bool[,] hitTiles = weap1.tilesHittable(this.transform.position);
+            for (int i = 0; i < hitTiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < hitTiles.GetLength(1); j++)
+                {
+                    if (hitTiles[i, j])
+                    {
+                        if (j % 2 == 1)
+                        {
+                            hittableTiles[i,j] = Instantiate(redTile, new Vector3(i + 0.5f, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
+                        }
+                        else
+                        {
+                            hittableTiles[i,j] = Instantiate(redTile, new Vector3(i, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
+                        }
+                    }
+                }
+            }
+            hitTilesDisp = true;
+        }
+    }
+    public void fire1(Vector3 target)
     {
         if (actions > 1)
         {
+            this.tag = "Untagged";
+            removeHitTiles();
             weap1.fire(this.transform.position,target);
             actions -= 2;
         }
     }
-    void fire2(Vector3 target)
+    void showHittableTiles2()
     {
         if (actions > 1)
         {
+            this.tag = "Firing2";
+            bool[,] hitTiles = weap2.tilesHittable(this.transform.position);
+            for (int i = 0; i < hitTiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < hitTiles.GetLength(1); j++)
+                {
+                    if (hitTiles[i, j] != null)
+                    {
+                        if (i % 2 == 1)
+                        {
+                            hittableTiles[i,j] = Instantiate(redTile, new Vector3(i + 0.5f, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
+                        }
+                        else
+                        {
+                            hittableTiles[i,j] = Instantiate(redTile, new Vector3(i, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
+                        }
+                    }
+                }
+            }
+            hitTilesDisp = true;
+        }
+    }
+    public void fire2(Vector3 target)
+    {
+        if (actions > 1)
+        {
+            this.tag = "Untagged";
+            removeHitTiles();
             weap2.fire(this.transform.position,target);
             actions -= 2;
         }
     }
+    void removeHitTiles()
+    {
+        for(int i = 0; i < hittableTiles.GetLength(0); i++)
+        {
+            for(int j = 0; j < hittableTiles.GetLength(1); j++)
+            {
+                if (hittableTiles[i, j] != null)
+                {
+                    Destroy(hittableTiles[i, j]);
+                    hittableTiles[i, j] = null;
+                }
+            }
+        }
+        hitTilesDisp = false;
+    }
     void OnMouseDown()
     {
-        if (actions > 0)
+        if (actions > 2)
         {
-
+            showMovableTiles();
+        }
+        else if(actions > 1)
+        {
+            showHittableTiles1();
         }
     }
     public void damage(int d)

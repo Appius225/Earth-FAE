@@ -32,7 +32,7 @@ public class BoardManager : MonoBehaviour
     {
         return rows;
     }
-    public int getCol()
+    public int getCols()
     {
         return columns;
     }
