@@ -19,6 +19,7 @@ public class BoardManager : MonoBehaviour
     private string cfgFileTemplate = "Assets/Config/Board_X.cfg";
     private List<Vector3> hexGridPositions = new List<Vector3>();
     private GameObject[,] objectPositions;
+    public int cityHealth = 10;
     private Transform boardContainer;
     public GameObject[,] objects;
 
@@ -27,7 +28,14 @@ public class BoardManager : MonoBehaviour
 
     Camera MainCamera;
     public static Vector3 screenCenter;
-
+    public int getRows()
+    {
+        return rows;
+    }
+    public int getCol()
+    {
+        return columns;
+    }
     private static Dictionary<string, int> tileToIntMap = new Dictionary<string, int>()
     {
         { "N", 0 },
@@ -130,10 +138,10 @@ public class BoardManager : MonoBehaviour
             for (int y = 0; y < rows; y++)
             {
                 GameObject toInstantiate = objectPositions[x, y];
-                if (y % 2 == 1) 
-                    objects[x,y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
-                else 
-                    objects[x,y] = Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
+                if (y % 2 == 1)
+                    objects[x, y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
+                else
+                    objects[x, y] = Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
 
                 objects[x,y].transform.SetParent(boardContainer);
             }
@@ -207,6 +215,10 @@ public class BoardManager : MonoBehaviour
             {
                 turnEnded = false;
                 endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+                for(int j = 0; j < 3; j++)
+                {
+                    (tanks[j].GetComponent(typeof(Tank)) as Tank).actions = (tanks[j].GetComponent(typeof(Tank)) as Tank).maxActions;
+                }
             }
         }
     }
