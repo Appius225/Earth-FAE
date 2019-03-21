@@ -59,16 +59,13 @@ public class Tank : MonoBehaviour
     void showMovableTiles()
     {
         this.tag = "Moving";
-        float x = Mathf.Floor(this.transform.position.x);
-        float y = Mathf.Round(this.transform.position.y / 0.75f);
-        Vector3 pos = offToAxial(new Vector3(x, y, 0));
-        Vector3 tile;
+        int x = (int) Mathf.Floor(this.transform.position.x);
+        int y = (int) Mathf.Round(this.transform.position.y / 0.75f);
         for(int i = 0; i < moveTiles.GetLength(0); i++)
         {
             for(int j = 0; j < moveTiles.GetLength(1); j++)
             {
-                tile = offToAxial(new Vector3(i, j, 0));
-                if (Mathf.Max(Mathf.Max(Mathf.Abs(tile.x - pos.x), Mathf.Abs(tile.y - pos.y)), Mathf.Abs(tile.z - pos.z)) < movement) ;
+                if (Mathf.Max((float)(i-x),(float)(j-y)) < movement) 
                 {
                     if (j % 2 == 1)
                     {
