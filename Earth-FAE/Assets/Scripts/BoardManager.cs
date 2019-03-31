@@ -16,7 +16,7 @@ public class BoardManager : MonoBehaviour
     public int cfgNum;
     private int columns = 15;
     private int rows = 10;
-    private string cfgFileTemplate = "Earth-FAE/Assets/Config/Board_X.cfg";
+    private string cfgFileTemplate = "Assets/Config/Board_X.cfg";
     private List<Vector3> hexGridPositions = new List<Vector3>();
     private GameObject[,] objectPositions;
     public int cityHealth = 10;
