@@ -8,7 +8,7 @@ public class BoardManager : MonoBehaviour
 {
     public GameObject[] tilePrefabs;
     public GameObject tank;
-    public GameObject red;
+    public GameObject spawn;
     public Boolean spawned = false;
     private Boolean initialized = false;
     public Vector3[] spawnPos = new Vector3[3];
@@ -21,7 +21,7 @@ public class BoardManager : MonoBehaviour
     private GameObject[,] objectPositions;
     public int cityHealth = 10;
     private Transform boardContainer;
-    public GameObject[,] objects;
+    public GameObject[,] objects; //2D array holding the initialized tiles
 
     public Boolean turnEnded;
     public GameObject endTurn;
@@ -156,9 +156,9 @@ public class BoardManager : MonoBehaviour
             for(int y = 0; y < rows; y++)
             {
                 if (y % 2 == 1 && x != 1)
-                    spawnable[x, y] = Instantiate(red, new Vector3(x + 0.5f, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
+                    spawnable[x, y] = Instantiate(spawn, new Vector3(x + 0.5f, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
                 else if (!(y%2==1 && x==1))
-                    spawnable[x, y] = Instantiate(red, new Vector3(x, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
+                    spawnable[x, y] = Instantiate(spawn, new Vector3(x, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
             }
         }
         Vector3 def = new Vector3(0.0f, 0.0f, 0.0f);
@@ -208,7 +208,7 @@ public class BoardManager : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
             Destroy(endButton);
-            fire();
+            fire();                     //Implemented, but no animation
             enemyAttacks();
             enemyMove();
             if (i != 4)
@@ -224,7 +224,34 @@ public class BoardManager : MonoBehaviour
     }
     void fire()
     {
-
+        tileData tile;
+        for(int i = 0; i < columns; i++)
+        {
+            for(int j = 0; j < rows; j++)
+            {
+                tile = objects[i, j].GetComponent(typeof(tileData)) as tileData;
+                if (tile.onFire)
+                {
+                    //fire damaging animation of some variety here
+                    if(tile.enemy != null)
+                    {
+                        tile.enemy.damage(1);
+                    }
+                    else if(tile.tank != null)
+                    {
+                        tile.tank.damage(1);
+                    }
+                }
+                else if (tile.enemy.OnFire)
+                {
+                    tile.enemy.damage(1);
+                }
+                else if (tile.tank.OnFire)
+                {
+                    tile.tank.damage(1);
+                }
+            }
+        }
     }
     void enemyAttacks()
     {

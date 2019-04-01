@@ -2,32 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public interface Enemy
 {
-    private int movement = 4;
-    private int health = 3;
-    public tileData tile;
-    public bool onFire = false;
+    tileData Tile { get; set; }
+    bool OnFire { get; set; }
 
-    void move()
-    {
-
-    }
-    void attack()
-    {
-
-    }
-    public void damage(int d)
-    {
-        for(int i = 1; i <= d && health > 0; i++)
-        {
-            health--;
-        }
-        if (health == 0)
-            this.die();
-    }
-    void die()
-    {
-
-    }
+    void move();
+    void attack();
+    void damage(int d);
+    void die();
 }
