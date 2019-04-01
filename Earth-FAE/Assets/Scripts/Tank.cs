@@ -9,7 +9,7 @@ public class Tank : MonoBehaviour
     private int health = 3;
     public int maxActions = 3;
     public int actions;
-    public bool onFire = false;
+    public bool OnFire = false;
     private Weapon weap1;
     private Weapon weap2;
     public GameObject greenTile;
@@ -51,9 +51,9 @@ public class Tank : MonoBehaviour
             int x = (int)Mathf.Floor(pos.x);
             int y = (int)Mathf.Round(pos.y / 0.75f);
             if (!(grid.objects[x, y].GetComponent(typeof(tileData)) as tileData ).onFire)
-                onFire = false;
+                OnFire = false;
             else
-                onFire = true;
+                OnFire = true;
         }
     }
     void showMovableTiles()
@@ -175,6 +175,7 @@ public class Tank : MonoBehaviour
     }
     void removeHitTiles()
     {
+        this.tag = "Untagged";
         for(int i = 0; i < hittableTiles.GetLength(0); i++)
         {
             for(int j = 0; j < hittableTiles.GetLength(1); j++)
