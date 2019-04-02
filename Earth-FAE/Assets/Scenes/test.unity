@@ -250,8 +250,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
+      propertyPath: tilePrefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
       propertyPath: cfgNum
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
       propertyPath: tank
@@ -267,6 +271,11 @@ PrefabInstance:
       propertyPath: endTurn
       value: 
       objectReference: {fileID: 8669336733359830399, guid: ea063060796bfba4e812a40399f1c4b6,
+        type: 3}
+    - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
+      propertyPath: tilePrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 645435947658581859, guid: 7389b5766c808c541826b99e075a635e,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
