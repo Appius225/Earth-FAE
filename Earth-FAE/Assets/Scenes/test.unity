@@ -253,5 +253,20 @@ PrefabInstance:
       propertyPath: cfgNum
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
+      propertyPath: tank
+      value: 
+      objectReference: {fileID: 6443491495700026576, guid: 9827ca524e8d93243b07921fbc7f374a,
+        type: 3}
+    - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
+      propertyPath: spawn
+      value: 
+      objectReference: {fileID: 4472966101420188593, guid: bad13ef1da1d24047b8edda560df89d0,
+        type: 3}
+    - target: {fileID: 790122126, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}
+      propertyPath: endTurn
+      value: 
+      objectReference: {fileID: 8669336733359830399, guid: ea063060796bfba4e812a40399f1c4b6,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 311b194ad66d1ae4f9f039af1a6c9b4e, type: 3}

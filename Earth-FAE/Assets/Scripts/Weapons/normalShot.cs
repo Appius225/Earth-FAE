@@ -8,249 +8,243 @@ public class normalShot : MonoBehaviour , Weapon
     public void fire(Vector3 pos, Vector3 target)
     {
         BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
-        int px = (int)Mathf.Floor(pos.x);
-        int py = (int)Mathf.Round(pos.y / 0.75f);
-        int tx = (int)Mathf.Floor(target.x);
-        int ty = (int)Mathf.Round(target.y / 0.75f);
         tileData tile;
-        int i;
-        if ((px - tx) == 0)
+        if (target.y == pos.y)
         {
-            if (ty > py)
+            int y = (int)Mathf.Round(pos.y / 0.75f);
+            if (target.x > pos.x)
             {
-                for(i = py + 1; i < grid.getRows(); i++)
+                int i;
+                for(i = (int)Mathf.Floor(pos.x); i < grid.getCols(); i++)
                 {
-                    tile = (grid.objects[tx, i].GetComponent(typeof(tileData)) as tileData);
-                    if (tile != null)
+                    tile = (grid.objects[i,y].GetComponent(typeof(tileData)) as tileData);
+                    if (tile.city)
                     {
-                        if (tile.city)
+                        //animation
+                        grid.cityHealth -= damage;
+                        if (grid.cityHealth <= 0)
                         {
-                            grid.cityHealth -= damage;
-                            if (grid.cityHealth <= 0)
-                            {
-                                //something something lose game
-                            }
-                            //something something animation
-                            i = 100;
+                            //lose game
                         }
-                        else if (tile.blocked) { i = 100; }
-                        else if (tile.enemy != null)
-                        {
-                            tile.enemy.damage(damage);
-                            //something something animation
-                            i = 100;
-                        }
-                        else if (tile.tank != null)
-                        {
-                            tile.tank.damage(damage);
-                            //something something animation
-                            i = 100;
-                        }
+                        i = 100;
+                    }
+                    else if (tile.blocked)
+                    {
+                        i = 100;
+                        //run animation
+                    }
+                    else if (tile.enemy != null)
+                    {
+                        //animation
+                        tile.enemy.damage(damage);
+                        i = 100;
+                    }
+                    else if(tile.tank != null)
+                    {
+                        //animation
+                        tile.tank.damage(damage);
+                        i = 100;
                     }
                 }
                 if (i != 100)
                 {
-                    //something something miss animation
+                    //miss animation
                 }
             }
             else
             {
-                for(i = py - 1; i >= 0; i++)
+                int i;
+                for (i = (int)Mathf.Floor(pos.x); i >= 0; i--)
                 {
-                    tile = (grid.objects[tx, i].GetComponent(typeof(tileData)) as tileData);
-                    if (tile != null)
+                    tile = (grid.objects[i, y].GetComponent(typeof(tileData)) as tileData);
+                    if (tile.city)
                     {
-                        if (tile.city)
+                        //animation
+                        grid.cityHealth -= damage;
+                        if (grid.cityHealth <= 0)
                         {
-                            grid.cityHealth -= damage;
-                            if (grid.cityHealth <= 0)
-                            {
-                                //something something lose game
-                            }
-                            //something something animation
-                            i = -100;
+                            //lose game
                         }
-                        else if (tile.blocked) { i = -100; }
-                        else if (tile.enemy != null)
-                        {
-                            tile.enemy.damage(damage);
-                            //something something animation
-                            i = -100;
-                        }
-                        else if (tile.tank != null)
-                        {
-                            tile.tank.damage(damage);
-                            //something something animation
-                            i = -100;
-                        }
+                        i = 100;
+                    }
+                    else if (tile.blocked)
+                    {
+                        i = 100;
+                        //run animation
+                    }
+                    else if (tile.enemy != null)
+                    {
+                        //animation
+                        tile.enemy.damage(damage);
+                        i = 100;
+                    }
+                    else if (tile.tank != null)
+                    {
+                        //animation
+                        tile.tank.damage(damage);
+                        i = 100;
                     }
                 }
-                if (i != -100)
+                if (i != 100)
                 {
-                    //something something miss animation
+                    //miss animation
                 }
             }
         }
-        else if ((py - ty) == 0)
+        else if(target.x>pos.x && target.y > pos.y)
         {
-            if (tx > px)
+            int i;
+            for(i = 1; Mathf.Floor(pos.x + 0.5f * i) < grid.getCols() && Mathf.Round((pos.y + i * 0.75f) / 0.75f) < grid.getRows(); i++)
             {
-                for(i = px + 1; i < grid.getCols(); i++)
+                tile = (grid.objects[(int)Mathf.Floor(pos.x + 0.5f * i), (int)Mathf.Round((pos.y + i * 0.75f) / 0.75f)].GetComponent(typeof(tileData)) as tileData);
+                if (tile.city)
                 {
-                    tile = (grid.objects[i, ty].GetComponent(typeof(tileData)) as tileData);
-                    if (tile != null)
+                    //animation
+                    grid.cityHealth -= damage;
+                    if (grid.cityHealth <= 0)
                     {
-                        if (tile.city)
-                        {
-                            grid.cityHealth -= damage;
-                            if (grid.cityHealth <= 0)
-                            {
-                                //something something lose game
-                            }
-                            //something something animation
-                            i = 100;
-                        }
-                        else if (tile.blocked) { i = 100; }
-                        else if (tile.enemy != null)
-                        {
-                            tile.enemy.damage(damage);
-                            //something something animation
-                            i = 100;
-                        }
-                        else if (tile.tank != null)
-                        {
-                            tile.tank.damage(damage);
-                            //something something animation
-                            i = 100;
-                        }
+                        //lose game
                     }
+                    i = 100;
                 }
-                if (i != 100)
+                else if (tile.blocked)
                 {
-                    //something something miss animation
+                    i = 100;
+                    //run animation
+                }
+                else if (tile.enemy != null)
+                {
+                    //animation
+                    tile.enemy.damage(damage);
+                    i = 100;
+                }
+                else if (tile.tank != null)
+                {
+                    //animation
+                    tile.tank.damage(damage);
+                    i = 100;
                 }
             }
-            else
+            if (i != 100)
             {
-                for (i = px - 1; i >= 0; i++)
+                //miss animation
+            }
+        }
+        else if(target.x>pos.x && target.y < pos.y)
+        {
+            int i;
+            for(i = 1;Mathf.Floor(pos.x+0.5f*i)<grid.getCols() && Mathf.Round((pos.y - i * 0.75f) / 0.75f) >= 0; i++)
+            {
+                tile = (grid.objects[(int)Mathf.Floor(pos.x + 0.5f * i), (int)Mathf.Round((pos.y + i * 0.75f) / 0.75f)].GetComponent(typeof(tileData)) as tileData);
+                if (tile.city)
                 {
-                    tile = (grid.objects[i, ty].GetComponent(typeof(tileData)) as tileData);
-                    if (tile != null)
+                    //animation
+                    grid.cityHealth -= damage;
+                    if (grid.cityHealth <= 0)
                     {
-                        if (tile.city)
-                        {
-                            grid.cityHealth -= damage;
-                            if (grid.cityHealth <= 0)
-                            {
-                                //something something lose game
-                            }
-                            //something something animation
-                            i = -100;
-                        }
-                        else if (tile.blocked) { i = -100; }
-                        else if (tile.enemy != null)
-                        {
-                            tile.enemy.damage(damage);
-                            //something something animation
-                            i = -100;
-                        }
-                        else if (tile.tank != null)
-                        {
-                            tile.tank.damage(damage);
-                            //something something animation
-                            i = -100;
-                        }
+                        //lose game
                     }
+                    i = 100;
                 }
-                if (i != -100)
+                else if (tile.blocked)
                 {
-                    //something something miss animation
+                    i = 100;
+                    //run animation
                 }
+                else if (tile.enemy != null)
+                {
+                    //animation
+                    tile.enemy.damage(damage);
+                    i = 100;
+                }
+                else if (tile.tank != null)
+                {
+                    //animation
+                    tile.tank.damage(damage);
+                    i = 100;
+                }
+            }
+            if (i != 100)
+            {
+                //miss animation
+            }
+        }
+        else if (target.x < pos.x && target.y > pos.y)
+        {
+            int i;
+            for (i = 1; Mathf.Floor(pos.x - 0.5f * i) >= 0 && Mathf.Round((pos.y + i * 0.75f) / 0.75f) < grid.getRows();i++)
+            {
+                tile = (grid.objects[(int)Mathf.Floor(pos.x + 0.5f * i), (int)Mathf.Round((pos.y + i * 0.75f) / 0.75f)].GetComponent(typeof(tileData)) as tileData);
+                if (tile.city)
+                {
+                    //animation
+                    grid.cityHealth -= damage;
+                    if (grid.cityHealth <= 0)
+                    {
+                        //lose game
+                    }
+                    i = 100;
+                }
+                else if (tile.blocked)
+                {
+                    i = 100;
+                    //run animation
+                }
+                else if (tile.enemy != null)
+                {
+                    //animation
+                    tile.enemy.damage(damage);
+                    i = 100;
+                }
+                else if (tile.tank != null)
+                {
+                    //animation
+                    tile.tank.damage(damage);
+                    i = 100;
+                }
+            }
+            if (i != 100)
+            {
+                //miss animation
             }
         }
         else
         {
-            if (tx > px)
+            int i;
+            for (i = 1; Mathf.Floor(pos.x - 0.5f * i) >= 0 && Mathf.Round((pos.y - i * 0.75f) / 0.75f) >= 0; i++)
             {
-                i = px + 1;
-                int j = py - 1;
-                while (i < grid.getCols() && j >= 0)
+                tile = (grid.objects[(int)Mathf.Floor(pos.x + 0.5f * i), (int)Mathf.Round((pos.y + i * 0.75f) / 0.75f)].GetComponent(typeof(tileData)) as tileData);
+                if (tile.city)
                 {
-                    tile = (grid.objects[i, j].GetComponent(typeof(tileData)) as tileData);
-                    if (tile != null)
+                    //animation
+                    grid.cityHealth -= damage;
+                    if (grid.cityHealth <= 0)
                     {
-                        if (tile.city)
-                        {
-                            grid.cityHealth -= damage;
-                            if (grid.cityHealth <= 0)
-                            {
-                                //something something lose game
-                            }
-                            //something something animation
-                            i = 100;
-                        }
-                        else if (tile.blocked) { i = 100; }
-                        else if (tile.enemy != null)
-                        {
-                            tile.enemy.damage(damage);
-                            //something something animation
-                            i = 100;
-                        }
-                        else if (tile.tank != null)
-                        {
-                            tile.tank.damage(damage);
-                            //something something animation
-                            i = 100;
-                        }
+                        //lose game
                     }
-                    i++;
-                    j--;
+                    i = 100;
                 }
-                if (i != 100)
+                else if (tile.blocked)
                 {
-                    //something something miss animation
+                    i = 100;
+                    //run animation
+                }
+                else if (tile.enemy != null)
+                {
+                    //animation
+                    tile.enemy.damage(damage);
+                    i = 100;
+                }
+                else if (tile.tank != null)
+                {
+                    //animation
+                    tile.tank.damage(damage);
+                    i = 100;
                 }
             }
-            else
+            if (i != 100)
             {
-                i = px - 1;
-                int j = py + 1;
-                while (i >= 0 && j < grid.getRows())
-                {
-                    tile = (grid.objects[i, ty].GetComponent(typeof(tileData)) as tileData);
-                    if (tile != null)
-                    {
-                        if (tile.city)
-                        {
-                            grid.cityHealth -= damage;
-                            if (grid.cityHealth <= 0)
-                            {
-                                //something something lose game
-                            }
-                            //something something animation
-                            i = -100;
-                        }
-                        else if (tile.blocked) { i = -100; }
-                        else if (tile.enemy != null)
-                        {
-                            tile.enemy.damage(damage);
-                            //something something animation
-                            i = -100;
-                        }
-                        else if (tile.tank != null)
-                        {
-                            tile.tank.damage(damage);
-                            //something something animation
-                            i = -100;
-                        }
-                    }
-                    i--;
-                    j++;
-                }
-                if (i != -100)
-                {
-                    //something something miss animation
-                }
+                //miss animation
             }
         }
     }
@@ -264,21 +258,42 @@ public class normalShot : MonoBehaviour , Weapon
         {
             for(int j = 0; j < hitTiles.GetLength(1); j++)
             {
-                if ((i - x) == 0)
+                if ((j-y)==0)
                 {
-                    hitTiles[i, j] = true;
+                    if(i!=x)
+                    {
+                        hitTiles[i, j] = true;
+                    }
                 }
-                else if ((j - y) == 0)
+                else if ((j%2)==1)
                 {
-                    hitTiles[i, j] = true;
+                    if (Mathf.Round(((j * 0.75f) - position.y) / 0.75f) == Mathf.Round(((i + 0.5f) - position.x)/0.5f))
+                    {
+                        hitTiles[i, j] = true;
+                    }
+                    else if(Mathf.Round(((j * 0.75f) - position.y) / 0.75f) == - Mathf.Round(((i + 0.5f) - position.x) / 0.5f))
+                    {
+                        hitTiles[i, j] = true;
+                    }
+                    else
+                    {
+                        hitTiles[i, j] = false;
+                    }
                 }
-                else if ((j - y) == -(i - x))
+                else 
                 {
-                    hitTiles[i, j] = true;
-                }
-                else
-                {
-                    hitTiles[i, j] = false;
+                    if(Mathf.Round(((j*0.75f)-position.y)/0.75f)==Mathf.Round(((i - position.x)/0.5f)))
+                    {
+                        hitTiles[i, j] = true;
+                    }
+                    else if (Mathf.Round(((j * 0.75f) - position.y) / 0.75f) == - Mathf.Round(((i - position.x)/0.5f)))
+                    {
+                        hitTiles[i, j] = true;
+                    }
+                    else
+                    {
+                        hitTiles[i, j] = false;
+                    }
                 }
             }
         }
