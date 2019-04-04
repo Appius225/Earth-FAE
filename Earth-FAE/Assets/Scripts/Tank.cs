@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tank : MonoBehaviour
 {
     private BoardManager grid;
-    private int movement = 3;
+    private int movement = 4;
     private int health = 3;
     public int maxActions = 3;
     public int actions;
@@ -59,21 +59,132 @@ public class Tank : MonoBehaviour
     void showMovableTiles()
     {
         this.tag = "Moving";
-        int x = (int) Mathf.Floor(this.transform.position.x);
-        int y = (int) Mathf.Round(this.transform.position.y / 0.75f);
-        for(int i = 0; i < moveTiles.GetLength(0); i++)
+        Queue<GameObject>[] queues = new Queue<GameObject>[movement];
+        for(int i = 0; i < movement; i++)
         {
-            for(int j = 0; j < moveTiles.GetLength(1); j++)
+            queues[i] = new Queue<GameObject>();
+        }
+        if (Mathf.Floor(this.transform.position.x + 1) < grid.getCols() && Mathf.Round(this.transform.position.y / 0.75f) < grid.getRows())
+            queues[0].Enqueue(grid.objects[(int)Mathf.Floor(this.transform.position.x + 1), (int)Mathf.Round(this.transform.position.y / 0.75f)]);
+        if (Mathf.Floor(this.transform.position.x - 1) >= 0 && Mathf.Round(this.transform.position.y / 0.75f) < grid.getRows())
+            queues[0].Enqueue(grid.objects[(int)Mathf.Floor(this.transform.position.x - 1), (int)Mathf.Round(this.transform.position.y / 0.75f)]);
+        if (Mathf.Floor(this.transform.position.x + 0.5f) < grid.getCols() && Mathf.Round(this.transform.position.y / 0.75f + 1) < grid.getRows())
+            queues[0].Enqueue(grid.objects[(int)Mathf.Floor(this.transform.position.x + 0.5f), (int)Mathf.Round(this.transform.position.y / 0.75f + 1)]);
+        if (Mathf.Floor(this.transform.position.x + 0.5f) < grid.getCols() && Mathf.Round(this.transform.position.y / 0.75f - 1) >= 0)
+            queues[0].Enqueue(grid.objects[(int)Mathf.Floor(this.transform.position.x + 0.5f), (int)Mathf.Round(this.transform.position.y / 0.75f - 1)]);
+        if (Mathf.Floor(this.transform.position.x - 0.5f) >= 0 && Mathf.Round(this.transform.position.y / 0.75f + 1) < grid.getRows())
+            queues[0].Enqueue(grid.objects[(int)Mathf.Floor(this.transform.position.x - 0.5f), (int)Mathf.Round(this.transform.position.y / 0.75f + 1)]);
+        if (Mathf.Floor(this.transform.position.x - 0.5f) >= 0 && Mathf.Round(this.transform.position.y / 0.75f - 1) >= 0)
+            queues[0].Enqueue(grid.objects[(int)Mathf.Floor(this.transform.position.x - 0.5f), (int)Mathf.Round(this.transform.position.y / 0.75f - 1)]);
+        for(int i = 0; i < movement - 1; i++)
+        {
+            while (queues[i].Count != 0)
             {
-                if (Mathf.Max((float)(i-x),(float)(j-y)) < movement) 
+                GameObject cur = queues[i].Dequeue();
+                tileData tile = cur.GetComponent(typeof(tileData)) as tileData;
+                if (!tile.city && (tile.enemy==null)  && !tile.blocked && !tile.isNull)
                 {
-                    if (j % 2 == 1)
+                    if(moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] == null && cur.transform.position != grid.objects[(int)Mathf.Floor(this.transform.position.x),(int)Mathf.Round(this.transform.position.y/0.75f)].transform.position)
                     {
-                        moveTiles[i, j] = Instantiate(greenTile, new Vector3(i + 0.5f, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
+                        moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] = Instantiate(greenTile, new Vector3(cur.transform.position.x, cur.transform.position.y, -0.02f), Quaternion.identity) as GameObject;
                     }
-                    else
+                    GameObject temp;
+                    bool found;
+                    if (Mathf.Floor(cur.transform.position.x + 1) < grid.getCols() && Mathf.Round(cur.transform.position.y / 0.75f) < grid.getRows())
                     {
-                        moveTiles[i, j] = Instantiate(greenTile, new Vector3(i, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
+                        temp = grid.objects[(int)Mathf.Floor(cur.transform.position.x + 1), (int)Mathf.Round(cur.transform.position.y / 0.75f)];
+                        found = false;
+                        for (int j = 0; j < movement && !found; j++)
+                        {
+                            if (queues[j].Contains(temp))
+                            {
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            queues[i + 1].Enqueue(temp);
+                        }
+                    }
+                    if (Mathf.Floor(cur.transform.position.x - 1) >= 0 && Mathf.Round(cur.transform.position.y / 0.75f) < grid.getRows())
+                    {
+                        temp = grid.objects[(int)Mathf.Floor(cur.transform.position.x - 1), (int)Mathf.Round(cur.transform.position.y / 0.75f)];
+                        found = false;
+                        for (int j = 0; j < movement && !found; j++)
+                        {
+                            if (queues[j].Contains(temp))
+                            {
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            queues[i + 1].Enqueue(temp);
+                        }
+                    }
+                    if (Mathf.Floor(cur.transform.position.x + 0.5f) < grid.getCols() && Mathf.Round(cur.transform.position.y / 0.75f + 1) < grid.getRows())
+                    {
+                        temp = grid.objects[(int)Mathf.Floor(cur.transform.position.x + 0.5f), (int)Mathf.Round(cur.transform.position.y / 0.75f + 1)];
+                        found = false;
+                        for (int j = 0; j < movement && !found; j++)
+                        {
+                            if (queues[j].Contains(temp))
+                            {
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            queues[i + 1].Enqueue(temp);
+                        }
+                    }
+                    if (Mathf.Floor(cur.transform.position.x + 0.5f) < grid.getCols() && Mathf.Round(cur.transform.position.y / 0.75f - 1) >= 0)
+                    {
+                        temp = grid.objects[(int)Mathf.Floor(cur.transform.position.x + 0.5f), (int)Mathf.Round(cur.transform.position.y / 0.75f - 1)];
+                        found = false;
+                        for (int j = 0; j < movement && !found; j++)
+                        {
+                            if (queues[j].Contains(temp))
+                            {
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            queues[i + 1].Enqueue(temp);
+                        }
+                    }
+                    if (Mathf.Floor(cur.transform.position.x - 0.5f) >= 0 && Mathf.Round(cur.transform.position.y / 0.75f + 1) < grid.getRows())
+                    {
+                        temp = grid.objects[(int)Mathf.Floor(cur.transform.position.x - 0.5f), (int)Mathf.Round(cur.transform.position.y / 0.75f + 1)];
+                        found = false;
+                        for (int j = 0; j < movement && !found; j++)
+                        {
+                            if (queues[j].Contains(temp))
+                            {
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            queues[i + 1].Enqueue(temp);
+                        }
+                    }
+                    if (Mathf.Floor(cur.transform.position.x - 0.5f) >= 0 && Mathf.Round(cur.transform.position.y / 0.75f - 1) >= 0)
+                    {
+                        temp = grid.objects[(int)Mathf.Floor(cur.transform.position.x - 0.5f), (int)Mathf.Round(cur.transform.position.y / 0.75f - 1)];
+                        found = false;
+                        for (int j = 0; j < movement && !found; j++)
+                        {
+                            if (queues[j].Contains(temp))
+                            {
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            queues[i + 1].Enqueue(temp);
+                        }
                     }
                 }
             }

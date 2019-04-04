@@ -9,4 +9,5 @@ public class tileData : MonoBehaviour
     public bool onFire = false;
     public Enemy enemy = null;
     public bool blocked = false;
+    public bool isNull = false;
 }

@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81c7c2f18d558a4f87e7ae5ce8dfc13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  city: 0
+  city: 1
   tank: {fileID: 0}
   onFire: 0
   blocked: 0

@@ -41,7 +41,8 @@ public class BoardManager : MonoBehaviour
         { "N", 0 },
         { "D", 1 },
         { "G", 2 },
-        { "W", 3 }
+        { "W", 3 },
+        { "C", 4 }
     };
 
     /*
@@ -242,13 +243,19 @@ public class BoardManager : MonoBehaviour
                         tile.tank.damage(1);
                     }
                 }
-                else if (tile.enemy.OnFire)
+                else if (tile.enemy != null)
                 {
-                    tile.enemy.damage(1);
+                    if (tile.enemy.OnFire)
+                    {
+                        tile.enemy.damage(1);
+                    }
                 }
-                else if (tile.tank.OnFire)
+                else if (tile.tank != null)
                 {
-                    tile.tank.damage(1);
+                    if (tile.tank.OnFire)
+                    {
+                        tile.tank.damage(1);
+                    }
                 }
             }
         }
