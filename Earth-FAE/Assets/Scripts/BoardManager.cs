@@ -42,7 +42,8 @@ public class BoardManager : MonoBehaviour
         { "D", 1 },
         { "G", 2 },
         { "W", 3 },
-        { "C", 4 }
+        { "C", 4 },
+        { "B", 5 },
     };
 
     /*
@@ -64,6 +65,9 @@ public class BoardManager : MonoBehaviour
      *  N = null tile
      *  D = dirt tile
      *  G = grass tile
+     *  W = water tile
+     *  C = city tile
+     *  B = boulder tile
      *  ...
      */
     void FillObjectPositions()
@@ -95,16 +99,7 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            objectPositions = new GameObject[columns, rows];
-
-            for (int i = 0; i < columns; i++)
-            {
-                for (int j = 0; j < rows; j++)
-                {
-                    if(j % 2 == 1 && i == columns-1) objectPositions[i,j] = tilePrefabs[0]; // NULL TILE
-                    else objectPositions[i,j] = tilePrefabs[1];           // DEFAULT TILE
-                }
-            }
+            Debug.Log("Error: Config Not Found!");
         }
 
         float new_x = ((columns / 2) - 1.0f) + (columns % 2 == 0 ? 0.5f : 1.0f); //new calculation for camera
@@ -138,11 +133,11 @@ public class BoardManager : MonoBehaviour
         {
             for (int y = 0; y < rows; y++)
             {
-                GameObject toInstantiate = objectPositions[x, y];
+                GameObject toInstantiate = objectPositions[x,y];
                 if (y % 2 == 1)
-                    objects[x, y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
+                    objects[x,y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
                 else
-                    objects[x, y] = Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
+                    objects[x,y] = Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
 
                 objects[x,y].transform.SetParent(boardContainer);
             }
@@ -157,9 +152,9 @@ public class BoardManager : MonoBehaviour
             for(int y = 0; y < rows; y++)
             {
                 if (y % 2 == 1 && x != 1)
-                    spawnable[x, y] = Instantiate(spawn, new Vector3(x + 0.5f, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
+                    spawnable[x,y] = Instantiate(spawn, new Vector3(x + 0.5f, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
                 else if (!(y%2==1 && x==1))
-                    spawnable[x, y] = Instantiate(spawn, new Vector3(x, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
+                    spawnable[x,y] = Instantiate(spawn, new Vector3(x, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
             }
         }
         Vector3 def = new Vector3(0.0f, 0.0f, 0.0f);
@@ -171,7 +166,7 @@ public class BoardManager : MonoBehaviour
         {
             for(int y = 0; y < rows; y++)
             {
-                Destroy(spawnable[x, y]);
+                Destroy(spawnable[x,y]);
             }
         }
         Vector3[] startPos = new Vector3[3];
@@ -230,7 +225,7 @@ public class BoardManager : MonoBehaviour
         {
             for(int j = 0; j < rows; j++)
             {
-                tile = objects[i, j].GetComponent(typeof(tileData)) as tileData;
+                tile = objects[i,j].GetComponent(typeof(tileData)) as tileData;
                 if (tile.onFire)
                 {
                     //fire damaging animation of some variety here
