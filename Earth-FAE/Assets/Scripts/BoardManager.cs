@@ -79,11 +79,11 @@ public class BoardManager : MonoBehaviour
             int[] dimensions = Array.ConvertAll<string, int>(cfgIn.ReadLine().Split(','), int.Parse);
             columns = dimensions[0];
             rows = dimensions[1];
-            objectPositions = new GameObject[rows, columns];
-            objects = new GameObject[rows, columns];
+            objectPositions = new GameObject[columns, rows];
+            objects = new GameObject[columns, rows];
             // Debug.Log(columns);
             // Debug.Log(rows);
-            for(int i = 0; i < columns; i++)
+            for(int i = 0; i < rows; i++)
             {
                 string[] row = cfgIn.ReadLine().Split(',');
                 // foreach(var item in row)
@@ -91,7 +91,7 @@ public class BoardManager : MonoBehaviour
                 //     Debug.Log(item);
                 // }
                 
-                for(int j = 0; j < rows; j++)
+                for(int j = 0; j < columns; j++)
                 {
                     objectPositions[j,i] = tilePrefabs[tileToIntMap[row[j]]];
                 }
