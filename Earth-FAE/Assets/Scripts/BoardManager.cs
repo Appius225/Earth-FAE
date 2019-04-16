@@ -19,6 +19,7 @@ public class BoardManager : MonoBehaviour
     private string cfgFileTemplate = "Assets/Config/Board_X.cfg";
     private List<Vector3> hexGridPositions = new List<Vector3>();
     private GameObject[,] objectPositions;
+    public bool[,] cityTiles;
     public int cityHealth = 10;
     private Transform boardContainer;
     public GameObject[,] objects; //2D array holding the initialized tiles
@@ -81,6 +82,7 @@ public class BoardManager : MonoBehaviour
             rows = dimensions[1];
             objectPositions = new GameObject[columns, rows];
             objects = new GameObject[columns, rows];
+            cityTiles = new bool[columns, rows];
             // Debug.Log(columns);
             // Debug.Log(rows);
             for(int i = 0; i < rows; i++)
@@ -93,7 +95,15 @@ public class BoardManager : MonoBehaviour
                 
                 for(int j = 0; j < columns; j++)
                 {
-                    objectPositions[j,i] = tilePrefabs[tileToIntMap[row[j]]];
+                    if (tileToIntMap[row[j]] == 4)
+                    {
+                        cityTiles[j, i] = true;
+                    }
+                    else
+                    {
+                        cityTiles[j, i] = false;
+                    }
+                    objectPositions[j, i] = tilePrefabs[tileToIntMap[row[j]]];
                 }
             }
         }
@@ -135,10 +145,27 @@ public class BoardManager : MonoBehaviour
             {
                 GameObject toInstantiate = objectPositions[x,y];
                 if (y % 2 == 1)
-                    objects[x,y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
+                {
+                    if (cityTiles[x, y])
+                    {
+                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y * 0.75f, -0.001f), Quaternion.identity) as GameObject;
+                    }
+                    else
+                    {
+                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), -0.001f), Quaternion.identity) as GameObject;
+                    }
+                }
                 else
-                    objects[x,y] = Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
-
+                {
+                    if (cityTiles[x, y])
+                    {
+                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x, y * 0.75f, 0.0f), Quaternion.identity) as GameObject;
+                    }
+                    else
+                    {
+                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
+                    }
+                }
                 objects[x,y].transform.SetParent(boardContainer);
             }
         }
