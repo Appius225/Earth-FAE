@@ -7,7 +7,7 @@ public interface Enemy
     tileData Tile { get; set; }
     bool OnFire { get; set; }
 
-    void move();
+    IEnumerator move();
     void attack();
     void damage(int d);
     void die();

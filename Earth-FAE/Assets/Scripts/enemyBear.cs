@@ -12,16 +12,22 @@ public class enemyBear : MonoBehaviour, Enemy
     public bool OnFire { get { return this.onFire; } set { this.onFire = value; } }
     public enemyBear() { onFire = false; }
     private Vector3 tileToHitDiff;
+    private bool isRunning;
+    private GameObject tileToHit;
+    public GameObject hitTile;
 
-    public void move()
+    public IEnumerator move()
     {
+        BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
         Queue<GameObject>[] queues = new Queue<GameObject>[movement + 1];
         GameObject cur;
         tileData tile;
-        bool targetFound;
+        bool targetFound = false;
+        Vector3 originalPosition = this.transform.position;
+        Vector3 finalPosition = new Vector3(0.0f,0.0f,0.0f);
         for(int i = 0; i < movement + 1; i++)
         {
-            queues[i] = new Queue<>();
+            queues[i] = new Queue<GameObject>();
         }
         if (Mathf.Floor(this.transform.position.x + 1) < grid.getCols() && Mathf.Round(this.transform.position.y / 0.75f) < grid.getRows())
             queues[0].Enqueue(grid.objects[(int)Mathf.Floor(this.transform.position.x + 1), (int)Mathf.Round(this.transform.position.y / 0.75f)]);
@@ -40,18 +46,14 @@ public class enemyBear : MonoBehaviour, Enemy
             while(queues[i].Count != 0 && !targetFound)
             {
                 cur = queues[i].Dequeue();
-                tile = cur.GetComponenet(typeof(tileData)) as tileData;
+                tile = cur.GetComponent(typeof(tileData)) as tileData;
                 if (tile.city)
                 {
                     targetFound = true;
-                    vector3 = new Vector3(cur.transform.position);
+                    tileToHitDiff = new Vector3(cur.transform.position.x,cur.transform.position.y,cur.transform.position.z);
                 }
                 else if((tile.tank==null) && !tile.blocked && tile.isNull)
                 {
-                    if (moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] == null && cur.transform.position != grid.objects[(int)Mathf.Floor(this.transform.position.x), (int)Mathf.Round(this.transform.position.y / 0.75f)].transform.position)
-                    {
-                        moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] = Instantiate(greenTile, new Vector3(cur.transform.position.x, cur.transform.position.y, -0.02f), Quaternion.identity) as GameObject;
-                    }
                     GameObject temp;
                     bool found;
                     if (Mathf.Floor(cur.transform.position.x + 1) < grid.getCols() && Mathf.Round(cur.transform.position.y / 0.75f) < grid.getRows())
@@ -157,11 +159,11 @@ public class enemyBear : MonoBehaviour, Enemy
         while (queues[movement].Count != 0 && !targetFound)
         {
             cur = queues[movement].Dequeue();
-            tile = cur.GetComponenet(typeof(tileData)) as tileData;
+            tile = cur.GetComponent(typeof(tileData)) as tileData;
             if (tile.city)
             {
                 targetFound = true;
-                vector3 = new Vector3(cur.transform.position);
+                tileToHitDiff = new Vector3(cur.transform.position.x,cur.transform.position.y,cur.transform.position.z);
             }
         }
         if (!targetFound)
@@ -183,18 +185,14 @@ public class enemyBear : MonoBehaviour, Enemy
                 while (queues[i].Count != 0 && !targetFound)
                 {
                     cur = queues[i].Dequeue();
-                    tile = cur.GetComponenet(typeof(tileData)) as tileData;
+                    tile = cur.GetComponent(typeof(tileData)) as tileData;
                     if (tile.tank != null)
                     {
                         targetFound = true;
-                        vector3 = new Vector3(cur.transform.position);
+                        tileToHitDiff = new Vector3(cur.transform.position.x,cur.transform.position.y,cur.transform.position.z);
                     }
                     else if ((tile.tank == null) && !tile.blocked && tile.isNull)
                     {
-                        if (moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] == null && cur.transform.position != grid.objects[(int)Mathf.Floor(this.transform.position.x), (int)Mathf.Round(this.transform.position.y / 0.75f)].transform.position)
-                        {
-                            moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] = Instantiate(greenTile, new Vector3(cur.transform.position.x, cur.transform.position.y, -0.02f), Quaternion.identity) as GameObject;
-                        }
                         GameObject temp;
                         bool found;
                         if (Mathf.Floor(cur.transform.position.x + 1) < grid.getCols() && Mathf.Round(cur.transform.position.y / 0.75f) < grid.getRows())
@@ -299,16 +297,285 @@ public class enemyBear : MonoBehaviour, Enemy
             while(queues[movement].Count != 0 && !targetFound)
             {
                 cur = queues[movement].Dequeue();
-                tile = cur.GetComponenet(typeof(tileData)) as tileData;
+                tile = cur.GetComponent(typeof(tileData)) as tileData;
                 if (tile.city)
                 {
                     targetFound = true;
-                    vector3 = new Vector3(cur.transform.position);
+                    tileToHitDiff = new Vector3(cur.transform.position.x,cur.transform.position.y,cur.transform.position.z);
                 }
             }
         }
-        //Final condition, move towards center x on a city row
-        //Pathfind back to this.transform.position and display target
+        if (!targetFound)
+        {
+            int posY = (int)Mathf.Round(this.transform.position.y / 0.75f);
+            float x = grid.getCols() / 2;
+            float y = 0;
+            for(int i = 0; i < grid.getRows(); i++)
+            {
+                if (grid.cityRows[i])
+                {
+                    if (Mathf.Abs(posY - y) > Mathf.Abs(posY - i))
+                    {
+                        y = (float) i;
+                    }
+                }
+            }
+            if (y % 2 == 1)
+            {
+                x = x + 0.5f;
+            }
+            float dirX;
+            if(this.transform.position.x > x)
+            {
+                dirX = 1.0f;
+            }
+            else
+            {
+                dirX = -1.0f;
+            }
+            for(int i = 0; i < movement; i++)
+            {
+                float my = 0.0f;
+                float mx = 0.0f;
+                Vector3 pos = this.transform.position;
+                if (Mathf.Round(pos.y / 0.75f) > y)
+                {
+                    my = 0.75f;
+                    if (dirX > 0.0f)
+                    {
+                        mx = 0.5f;
+                    }
+                    else
+                    {
+                        mx = -0.5f;
+                    }
+                }
+                else if (Mathf.Round(pos.y / 0.75f) < y)
+                {
+                    my = -0.75f;
+                    if (dirX > 0.0f)
+                    {
+                        mx = 0.5f;
+                    }
+                    else
+                    {
+                        mx = -0.5f;
+                    }
+                }
+                else
+                {
+                    if (dirX > 0.0f)
+                    {
+                        mx = 1.0f;
+                    }
+                    else
+                    {
+                        mx = -1.0f;
+                    }
+                }
+                Vector3 moveTo = new Vector3(this.transform.position.x + mx, this.transform.position.y + my, this.transform.position.z);
+                GameObject temp = grid.objects[(int)Mathf.Floor(moveTo.x), (int)Mathf.Round(moveTo.y / 0.75f)];
+                tile = temp.GetComponent(typeof(tileData)) as tileData;
+                int iter = 0;
+                while((tile.enemy!=null || tile.blocked || tile.isNull || tile.city || tile.tank != null) && iter < 6)
+                {
+                    if (mx > 0.0f)
+                    {
+                        if (my > 0.0f)
+                        {
+                            mx = 1.0f;
+                            my = 0.0f;
+                            moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                        }
+                        else if (my == 0.0f)
+                        {
+                            mx = 0.5f;
+                            my = -0.75f;
+                            moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                        }
+                        else
+                        {
+                            mx = -0.5f;
+                            my = 0.75f;
+                            moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                        }
+                    }
+                    else
+                    {
+                        if(my > 0.0f)
+                        {
+                            mx = -1.0f;
+                            my = 0.0f;
+                            moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                        }
+                        else if(my == 0.0f)
+                        {
+                            mx = -0.5f;
+                            my = -0.75f;
+                            moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                        }
+                        else
+                        {
+                            mx = 0.5f;
+                            my = 0.75f;
+                            moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                        }
+                    }
+                    iter++;
+                    temp = grid.objects[(int)Mathf.Floor(moveTo.x), (int)Mathf.Round(moveTo.y / 0.75f)];
+                    tile = temp.GetComponent(typeof(tileData)) as tileData;
+                }
+                if(iter == 6)
+                {
+                    moveTo = new Vector3(pos.x, pos.y, pos.z);
+                }
+                isRunning = true;
+                StartCoroutine(moveTile(moveTo));
+                while (isRunning)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+                finalPosition = moveTo;
+            }
+        }
+        else
+        {
+            Vector3 moveTo;
+            cur = grid.objects[(int)Mathf.Floor(this.transform.position.x), (int)Mathf.Round(this.transform.position.y / 0.75f)];
+            bool done = false;
+            Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+            float mx;
+            float my;
+            while (!done)
+            {
+
+                if (tileToHitDiff.y > this.transform.position.y)
+                {
+                    if (tileToHitDiff.x < this.transform.position.x)
+                    {
+                        moveTo = new Vector3(pos.x - 0.5f, pos.y + 0.75f, pos.z);
+                        mx = -0.5f;
+                        my = 0.75f;
+                    }
+                    else
+                    {
+                        moveTo = new Vector3(pos.x + 0.5f, pos.y + 0.75f, pos.z);
+                        mx = 0.5f;
+                        my = 0.75f;
+                    }
+                }
+                else if (tileToHitDiff.y < this.transform.position.y)
+                {
+                    if (tileToHitDiff.x < pos.x)
+                    {
+                        moveTo = new Vector3(pos.x - 0.5f, pos.y - 0.75f, pos.z);
+                        mx = -0.5f;
+                        my = -0.75f;
+                    }
+                    else
+                    {
+                        moveTo = new Vector3(pos.x + 0.5f, pos.y - 0.75f, pos.z);
+                        mx = 0.5f;
+                        my = -0.75f;
+                    }
+                }
+                else
+                {
+                    if (tileToHitDiff.x < pos.x)
+                    {
+                        moveTo = new Vector3(pos.x - 1.0f, pos.y, pos.z);
+                        mx = -1.0f;
+                        my = 0.0f;
+                    }
+                    else
+                    {
+                        moveTo = new Vector3(pos.x + 1.0f, pos.y, pos.z);
+                        mx = 1.0f;
+                        my = 0.0f;
+                    }
+                }
+                if(moveTo.x==tileToHitDiff.x && moveTo.y == tileToHitDiff.y && moveTo.z == tileToHitDiff.z)
+                {
+                    done = true;
+                    finalPosition = this.transform.position;
+                }
+                if (!done)
+                {
+                    GameObject temp = grid.objects[(int)Mathf.Floor(moveTo.x), (int)Mathf.Round(moveTo.y / 0.75f)];
+                    tile = temp.GetComponent(typeof(tileData)) as tileData;
+                    while (tile.blocked || tile.isNull || tile.city || tile.tank != null)
+                    {
+                        if (mx > 0.0f)
+                        {
+                            if (my > 0.0f)
+                            {
+                                mx = 1.0f;
+                                my = 0.0f;
+                                moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                            }
+                            else if (my == 0.0f)
+                            {
+                                mx = 0.5f;
+                                my = -0.75f;
+                                moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                            }
+                            else
+                            {
+                                mx = -0.5f;
+                                my = 0.75f;
+                                moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                            }
+                        }
+                        else
+                        {
+                            if (my > 0.0f)
+                            {
+                                mx = -1.0f;
+                                my = 0.0f;
+                                moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                            }
+                            else if (my == 0.0f)
+                            {
+                                mx = -0.5f;
+                                my = -0.75f;
+                                moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                            }
+                            else
+                            {
+                                mx = 0.5f;
+                                my = 0.75f;
+                                moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
+                            }
+                        }
+                        temp = grid.objects[(int)Mathf.Floor(moveTo.x), (int)Mathf.Round(moveTo.y / 0.75f)];
+                        tile = temp.GetComponent(typeof(tileData)) as tileData;
+                    }
+                    isRunning = true;
+                    StartCoroutine(moveTile(moveTo));
+                    while (isRunning)
+                    {
+                        yield return new WaitForEndOfFrame();
+                    }
+                    finalPosition = moveTo;
+                }
+            }
+            tileToHitDiff.x = tileToHitDiff.y - this.transform.position.x;
+            tileToHitDiff.y = tileToHitDiff.y - this.transform.position.y;
+            tileToHit = Instantiate(hitTile, new Vector3(this.transform.position.x + tileToHitDiff.x, this.transform.position.y + tileToHitDiff.y, this.transform.position.z),Quaternion.identity);
+            cur = grid.objects[(int)Mathf.Floor(originalPosition.x), (int)Mathf.Round(originalPosition.y / 0.75f)];
+            tile = cur.GetComponent(typeof(tileData)) as tileData;
+            tile.enemy = null;
+            cur = grid.objects[(int)Mathf.Floor(finalPosition.x), (int)Mathf.Round(finalPosition.y / 0.75f)];
+            tile = cur.GetComponent(typeof(tileData)) as tileData;
+            tile.enemy = this;
+            this.tile = tile;
+        }
+    }
+    IEnumerator moveTile(Vector3 pos)
+    {
+        this.transform.position = pos;
+        yield return new WaitForSeconds(0.25f);
+        isRunning = false;
     }
     public void attack()
     {
