@@ -970,6 +970,7 @@ GameObject:
   - component: {fileID: 841437644}
   - component: {fileID: 841437646}
   - component: {fileID: 841437645}
+  - component: {fileID: 841437647}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -1016,7 +1017,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c813057ea6fe39c43aa7240d29613f65, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e062201ffccdbfd4690ddfc58289ad52, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1033,6 +1034,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 841437643}
   m_CullTransparentMesh: 0
+--- !u!95 &841437647
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841437643}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5dd590dae13c4534cb1f3bbe66da013f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &855582352
 GameObject:
   m_ObjectHideFlags: 0
