@@ -60,6 +60,8 @@ public class Tank : MonoBehaviour
     {
         this.tag = "Moving";
         Queue<GameObject>[] queues = new Queue<GameObject>[movement];
+        GameObject cur;
+        tileData tile;
         for(int i = 0; i < movement; i++)
         {
             queues[i] = new Queue<GameObject>();
@@ -80,8 +82,8 @@ public class Tank : MonoBehaviour
         {
             while (queues[i].Count != 0)
             {
-                GameObject cur = queues[i].Dequeue();
-                tileData tile = cur.GetComponent(typeof(tileData)) as tileData;
+                cur = queues[i].Dequeue();
+                tile = cur.GetComponent(typeof(tileData)) as tileData;
                 if (!tile.city && (tile.enemy==null)  && !tile.blocked && !tile.isNull)
                 {
                     if(moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] == null && cur.transform.position != grid.objects[(int)Mathf.Floor(this.transform.position.x),(int)Mathf.Round(this.transform.position.y/0.75f)].transform.position)

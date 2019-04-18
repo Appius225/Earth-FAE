@@ -284,11 +284,33 @@ public class BoardManager : MonoBehaviour
     }
     void enemyAttacks()
     {
-
+        tileData tile;
+        for (int i = 0; i < columns, i++)
+        {
+            for (int j = 0; j < rows; j++)
+            {
+                tile = objects[i, j].GetComponent(typeof(tileData)) as tileData;
+                if (tile.enemy != null)
+                {
+                    tile.enemy.attack();
+                }
+            }
+        }
     }
     void enemyMove()
     {
-
+        tileData tile;
+        for(int i = 0; i < columns, i++)
+        {
+            for(int j = 0; j < rows; j++)
+            {
+                tile = objects[i, j].GetComponent(typeof(tileData)) as tileData;
+                if (tile.enemy != null)
+                {
+                    tile.enemy.move();
+                }
+            }
+        }
     }
 
     void Awake()
