@@ -24,6 +24,8 @@ public class BoardManager : MonoBehaviour
     public int cityHealth = 10;
     private Transform boardContainer;
     public GameObject[,] objects; //2D array holding the initialized tiles
+    private bool waiting;
+    private GameObject[,] spawningPos;
 
     public Boolean turnEnded;
     public GameObject endTurn;
@@ -84,6 +86,8 @@ public class BoardManager : MonoBehaviour
             objectPositions = new GameObject[columns, rows];
             objects = new GameObject[columns, rows];
             cityTiles = new bool[columns, rows];
+            cityRows = new bool[rows];
+            spawningPos = new GameObject[columns, rows];
             // Debug.Log(columns);
             // Debug.Log(rows);
             for(int i = 0; i < rows; i++)
@@ -238,8 +242,30 @@ public class BoardManager : MonoBehaviour
             }
             Destroy(endButton);
             fire();                     //Implemented, but no animation
-            enemyAttacks();
-            enemyMove();
+            StartCoroutine(enemyAttacks());
+            waiting = true;
+            while (waiting)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            StartCoroutine(enemySpawn());
+            waiting = true;
+            while (waiting)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            StartCoroutine(enemyMove());
+            waiting = true;
+            while (waiting)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            StartCoroutine(enemyNewSpawns());
+            waiting = true;
+            while (waiting)
+            {
+                yield return new WaitForEndOfFrame();
+            }
             if (i != 4)
             {
                 turnEnded = false;
@@ -250,6 +276,16 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+    }
+    IEnumerator enemySpawn()
+    {
+        yield return new WaitForEndOfFrame();
+        waiting = false;
+    }
+    IEnumerator enemyNewSpawns()
+    {
+        yield return new WaitForEndOfFrame();
+        waiting = false;
     }
     void fire()
     {
@@ -288,7 +324,7 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
-    void enemyAttacks()
+    IEnumerator enemyAttacks()
     {
         tileData tile;
         for (int i = 0; i < columns; i++)
@@ -298,12 +334,18 @@ public class BoardManager : MonoBehaviour
                 tile = objects[i, j].GetComponent(typeof(tileData)) as tileData;
                 if (tile.enemy != null)
                 {
-                    tile.enemy.attack();
+                    tile.enemy.isWaiting = true;
+                    StartCoroutine(tile.enemy.attack());
+                    while (tile.enemy.isWaiting)
+                    {
+                        yield return new WaitForEndOfFrame();
+                    }
                 }
             }
         }
+        waiting = false;
     }
-    void enemyMove()
+    IEnumerator enemyMove()
     {
         tileData tile;
         for(int i = 0; i < columns; i++)
@@ -313,10 +355,16 @@ public class BoardManager : MonoBehaviour
                 tile = objects[i, j].GetComponent(typeof(tileData)) as tileData;
                 if (tile.enemy != null)
                 {
+                    tile.enemy.isWaiting = true;
                     StartCoroutine(tile.enemy.move());
+                    while (tile.enemy.isWaiting)
+                    {
+                        yield return new WaitForEndOfFrame();
+                    }
                 }
             }
         }
+        waiting = false;
     }
 
     void Awake()

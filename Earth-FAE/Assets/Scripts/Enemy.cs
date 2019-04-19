@@ -6,9 +6,9 @@ public interface Enemy
 {
     tileData Tile { get; set; }
     bool OnFire { get; set; }
-
+    bool isWaiting { get; set; }
     IEnumerator move();
-    void attack();
+    IEnumerator attack();
     void damage(int d);
     void die();
 }

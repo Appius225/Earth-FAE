@@ -15,6 +15,8 @@ public class enemyBear : MonoBehaviour, Enemy
     private bool isRunning;
     private GameObject tileToHit;
     public GameObject hitTile;
+    private bool waiting;
+    public bool isWaiting { get { return this.isWaiting; } set { this.waiting = value; } }
 
     public IEnumerator move()
     {
@@ -577,9 +579,10 @@ public class enemyBear : MonoBehaviour, Enemy
         yield return new WaitForSeconds(0.25f);
         isRunning = false;
     }
-    public void attack()
+    public IEnumerator attack()
     {
-
+        yield return new WaitForEndOfFrame();
+        waiting = false;
     }
     public void damage(int d)
     {
