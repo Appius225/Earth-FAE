@@ -10,6 +10,8 @@ public class LevelSelectController : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
- 
-
+    public void LoadScene(int level)
+    {
+        Application.LoadLevel(level);
+    }
 }

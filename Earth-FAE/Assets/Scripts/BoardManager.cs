@@ -226,21 +226,24 @@ public class BoardManager : MonoBehaviour
         tanks[2].transform.position = spawnPos[2];
         initialized = true;
     }
+    public void endTurnButton()
+    {
 
+    }
     IEnumerator turn()
     {
         while (!initialized)
         {
             yield return new WaitForEndOfFrame();
         }
-        GameObject endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+        //GameObject endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
         for(int i = 0; i < 5; i++)
         {
             while (!turnEnded)
             {
                 yield return new WaitForEndOfFrame();
             }
-            Destroy(endButton);
+            //Destroy(endButton);
             fire();                     //Implemented, but no animation
             StartCoroutine(enemyAttacks());
             waiting = true;
@@ -269,7 +272,7 @@ public class BoardManager : MonoBehaviour
             if (i != 4)
             {
                 turnEnded = false;
-                endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+                //endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
                 for(int j = 0; j < 3; j++)
                 {
                     (tanks[j].GetComponent(typeof(Tank)) as Tank).actions = (tanks[j].GetComponent(typeof(Tank)) as Tank).maxActions;
