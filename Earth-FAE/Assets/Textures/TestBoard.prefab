@@ -47,7 +47,18 @@ MonoBehaviour:
   - {fileID: 9111639310376531454, guid: 224cb5bbd6257a6438fbc1a6a0875137, type: 3}
   - {fileID: 4693325442524726719, guid: 7cd2822bcc6fcb34b99c8bf317db6c4b, type: 3}
   - {fileID: 743855925630952665, guid: a69fe1ff6eb2efb49b249c035657e668, type: 3}
+  tank: {fileID: 0}
+  spawn: {fileID: 0}
+  spawned: 0
+  spawnPos:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   cfgNum: 0
+  cityRows: 
+  cityHealth: 10
+  turnEnded: 0
+  endTurn: {fileID: 0}
 --- !u!1 &1397779624
 GameObject:
   m_ObjectHideFlags: 0

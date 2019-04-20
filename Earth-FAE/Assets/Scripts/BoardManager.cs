@@ -148,28 +148,30 @@ public class BoardManager : MonoBehaviour
     void BoardSetup()
     {
         boardContainer = new GameObject("Container").transform;
-
-        for (int x = 0; x < columns; x++)
+        int cities = 0;
+        for (int y = 0; y < rows; y++)
         {
-            for (int y = 0; y < rows; y++)
+            for (int x = 0; x < columns; x++)
             {
                 GameObject toInstantiate = objectPositions[x,y];
                 if (y % 2 == 1)
                 {
                     if (cityTiles[x, y])
                     {
-                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y * 0.75f, -0.001f), Quaternion.identity) as GameObject;
+                        cities++;
+                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y * 0.75f, -0.008f + 0.001f * cities), Quaternion.identity) as GameObject;
                     }
                     else
                     {
-                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), -0.001f), Quaternion.identity) as GameObject;
+                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x + 0.5f, y - (y * .25f), 0.0f), Quaternion.identity) as GameObject;
                     }
                 }
                 else
                 {
                     if (cityTiles[x, y])
                     {
-                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x, y * 0.75f, 0.0f), Quaternion.identity) as GameObject;
+                        cities++;
+                        objects[x, y] = Instantiate(toInstantiate, new Vector3(x, y * 0.75f, -0.008f + 0.001f * cities), Quaternion.identity) as GameObject;
                     }
                     else
                     {
