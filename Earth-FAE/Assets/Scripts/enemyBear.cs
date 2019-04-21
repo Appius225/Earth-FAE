@@ -6,6 +6,7 @@ public class enemyBear : MonoBehaviour, Enemy
 {
     private int movement = 3;
     private int health = 4;
+    private int dmg = 2;
     private tileData tile;
     public tileData Tile { get { return this.tile; } set { this.tile = value; } }
     private bool onFire;
@@ -581,7 +582,26 @@ public class enemyBear : MonoBehaviour, Enemy
     }
     public IEnumerator attack()
     {
-        yield return new WaitForEndOfFrame();
+        BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
+        Vector3 target = new Vector3(this.transform.position.x + tileToHitDiff.x,this.transform.position.y + tileToHitDiff.y,0.0f);
+        if(target.x>0 && target.x<grid.getCols() && target.y>0 && target.y < grid.getRows())
+        {
+            GameObject hit = grid.objects[(int)Mathf.Floor(target.x), (int)Mathf.Round(target.y / 0.75f)];
+            tileData tile = hit.GetComponent(typeof(tileData)) as tileData;
+            if (tile.city)
+            {
+                grid.damageCity(dmg);
+            }
+            else if (tile.enemy != null)
+            {
+                tile.enemy.damage(dmg);
+            }
+            else if(tile.tank != null)
+            {
+                tile.tank.damage(dmg);
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
         waiting = false;
     }
     public void damage(int d)

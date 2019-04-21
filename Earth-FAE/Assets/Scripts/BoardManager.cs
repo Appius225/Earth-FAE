@@ -371,6 +371,17 @@ public class BoardManager : MonoBehaviour
         }
         waiting = false;
     }
+    public void damageCity(int d)
+    {
+        for(int i = 0; i < d && cityHealth > 0; i++)
+        {
+            cityHealth--;
+        }
+        if(cityHealth == 0)
+        {
+            //lose game
+        }
+    }
 
     void Awake()
     {
