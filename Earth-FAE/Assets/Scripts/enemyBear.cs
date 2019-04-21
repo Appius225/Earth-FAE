@@ -54,7 +54,7 @@ public class enemyBear : MonoBehaviour, Enemy
                     targetFound = true;
                     tileToHitDiff = new Vector3(cur.transform.position.x,cur.transform.position.y,cur.transform.position.z);
                 }
-                else if((tile.tank==null) && !tile.blocked && tile.isNull)
+                else if((tile.tank==null) && !tile.blocked && tile.isNull && (tile.enemy == null))
                 {
                     GameObject temp;
                     bool found;
