@@ -248,47 +248,56 @@ public class BoardManager : MonoBehaviour
         {
             yield return new WaitForEndOfFrame();
         }
-        //GameObject endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+        GameObject endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
         for(int i = 0; i < 5; i++)
         {
             while (!turnEnded)
             {
                 yield return new WaitForEndOfFrame();
             }
-            //Destroy(endButton);
-            fire();                     //Implemented, but no animation
+            Destroy(endButton);
+            fire();       //Implemented, but no animation
+            waiting = true;
             StartCoroutine(enemyAttacks());
-            waiting = true;
+            Debug.Log("Attacking");
             while (waiting)
             {
-                yield return new WaitForEndOfFrame();
-            }
-            StartCoroutine(enemySpawn());
-            waiting = true;
-            while (waiting)
-            {
-                yield return new WaitForEndOfFrame();
-            }
-            StartCoroutine(enemyMove());
-            waiting = true;
-            while (waiting)
-            {
-                yield return new WaitForEndOfFrame();
-            }
-            StartCoroutine(enemyNewSpawns());
-            waiting = true;
-            while (waiting)
-            {
+                //Debug.Log(waiting);
                 yield return new WaitForEndOfFrame();
             }
             if (i != 4)
             {
+
+                waiting = true;
+                StartCoroutine(enemySpawn());
+                Debug.Log("Spawning");
+                while (waiting)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+                waiting = true;
+                StartCoroutine(enemyMove());
+                Debug.Log("Moving");
+                while (waiting)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+                /*waiting = true;
+                StartCoroutine(enemyNewSpawns());
+                while (waiting)
+                {
+                    yield return new WaitForEndOfFrame();
+                }*/
                 turnEnded = false;
-                //endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+                endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
                 for(int j = 0; j < 3; j++)
                 {
                     (tanks[j].GetComponent(typeof(Tank)) as Tank).actions = (tanks[j].GetComponent(typeof(Tank)) as Tank).maxActions;
                 }
+            }
+            else
+            {
+                //traverse back to selection scene
             }
         }
     }
@@ -298,16 +307,24 @@ public class BoardManager : MonoBehaviour
         GameObject temp;
         for(int i = 0; i < num; i++)
         {
-            int y = UnityEngine.Random.Range(0, rows);
-            int x = UnityEngine.Random.Range(columns * 2 / 3 - 1, columns);
-            temp = Instantiate(enemyFabs[UnityEngine.Random.Range(0, enemyFabs.GetLength(0))], new Vector3(x, 12, -0.1f), Quaternion.identity) as GameObject;
-            float elapsedTime = 0.0f;
-            while (elapsedTime > 0.5f)
+            float y = UnityEngine.Random.Range(0, rows);
+            float x = (float)UnityEngine.Random.Range(columns * 2 / 3 - 1, columns - 1);
+            tileData tile = objects[(int)x, (int)y].GetComponent(typeof(tileData)) as tileData;
+            if (y % 2 == 1)
             {
-                temp.transform.position = Vector3.Lerp(new Vector3(x, 12, -0.1f), new Vector3(x, y, -0.1f), elapsedTime / 0.5f);
+                x += 0.5f;
+            }
+            y = y * 0.75f;
+            temp = Instantiate(enemyFabs[UnityEngine.Random.Range(0, enemyFabs.GetLength(0))], new Vector3(12, y, -0.1f), Quaternion.identity) as GameObject;
+            float elapsedTime = 0.0f;
+            while (elapsedTime < 0.5f)
+            {
+                temp.transform.position = Vector3.Lerp(new Vector3(12, y, -0.1f), new Vector3(x, y, -0.1f), elapsedTime / 0.5f);
                 elapsedTime += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
+            temp.transform.position = new Vector3(x, y, -0.1f);
+            tile.enemy = temp.GetComponent(typeof(Enemy)) as Enemy;
         }
         waiting = false;
     }
@@ -372,6 +389,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        Debug.Log(waiting);
         waiting = false;
     }
     IEnumerator enemyMove()
@@ -384,9 +402,10 @@ public class BoardManager : MonoBehaviour
                 tile = objects[i, j].GetComponent(typeof(tileData)) as tileData;
                 if (tile.enemy != null)
                 {
-                    tile.enemy.isWaiting = true;
-                    StartCoroutine(tile.enemy.move());
-                    while (tile.enemy.isWaiting)
+                    Enemy e = tile.enemy;
+                    e.isWaiting = true;
+                    StartCoroutine(e.move());
+                    while (e.isWaiting)
                     {
                         yield return new WaitForEndOfFrame();
                     }

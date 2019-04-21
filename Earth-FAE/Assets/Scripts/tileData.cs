@@ -10,4 +10,5 @@ public class tileData : MonoBehaviour
     public Enemy enemy = null;
     public bool blocked = false;
     public bool isNull = false;
+    public bool isWater = false;
 }

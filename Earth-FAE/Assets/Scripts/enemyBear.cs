@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class enemyBear : MonoBehaviour, Enemy
 {
-    private int movement = 3;
+    private int movement = 4;
     private int health = 4;
     private int dmg = 2;
     private tileData tile;
@@ -17,7 +17,7 @@ public class enemyBear : MonoBehaviour, Enemy
     private GameObject tileToHit;
     public GameObject hitTile;
     private bool waiting;
-    public bool isWaiting { get { return this.isWaiting; } set { this.waiting = value; } }
+    public bool isWaiting { get { return this.waiting; } set { this.waiting = value; } }
 
     public IEnumerator move()
     {
@@ -55,7 +55,7 @@ public class enemyBear : MonoBehaviour, Enemy
                     targetFound = true;
                     tileToHitDiff = new Vector3(cur.transform.position.x,cur.transform.position.y,cur.transform.position.z);
                 }
-                else if((tile.tank==null) && !tile.blocked && tile.isNull && (tile.enemy == null))
+                else if((tile.tank==null) && !tile.blocked && !tile.isNull && (tile.enemy == null) && !tile.isWater)
                 {
                     GameObject temp;
                     bool found;
@@ -194,7 +194,7 @@ public class enemyBear : MonoBehaviour, Enemy
                         targetFound = true;
                         tileToHitDiff = new Vector3(cur.transform.position.x,cur.transform.position.y,cur.transform.position.z);
                     }
-                    else if ((tile.tank == null) && !tile.blocked && tile.isNull && (tile.enemy == null))
+                    else if ((tile.tank == null) && !tile.blocked && !tile.isNull && (tile.enemy == null) && !tile.isWater)
                     {
                         GameObject temp;
                         bool found;
@@ -311,15 +311,15 @@ public class enemyBear : MonoBehaviour, Enemy
         if (!targetFound)
         {
             int posY = (int)Mathf.Round(this.transform.position.y / 0.75f);
-            float x = grid.getCols() / 2;
-            float y = 0;
+            float x = 0.0f;
+            int y = 0;
             for(int i = 0; i < grid.getRows(); i++)
             {
                 if (grid.cityRows[i])
                 {
                     if (Mathf.Abs(posY - y) > Mathf.Abs(posY - i))
                     {
-                        y = (float) i;
+                        y = i;
                     }
                 }
             }
@@ -328,22 +328,23 @@ public class enemyBear : MonoBehaviour, Enemy
                 x = x + 0.5f;
             }
             float dirX;
-            if(this.transform.position.x > x)
+            if((int)Mathf.Floor(this.transform.position.x) > (int)Mathf.Floor(x))
             {
-                dirX = 1.0f;
+                dirX = -1.0f;
             }
             else
             {
-                dirX = -1.0f;
+                dirX = 1.0f;
             }
             for(int i = 0; i < movement; i++)
             {
                 float my = 0.0f;
                 float mx = 0.0f;
                 Vector3 pos = this.transform.position;
-                if (Mathf.Round(pos.y / 0.75f) > y)
+                Debug.Log(y);
+                if ((int)Mathf.Round(pos.y / 0.75f) > y)
                 {
-                    my = 0.75f;
+                    my = -0.75f;
                     if (dirX > 0.0f)
                     {
                         mx = 0.5f;
@@ -353,9 +354,9 @@ public class enemyBear : MonoBehaviour, Enemy
                         mx = -0.5f;
                     }
                 }
-                else if (Mathf.Round(pos.y / 0.75f) < y)
+                else if ((int)Mathf.Round(pos.y / 0.75f) < y)
                 {
-                    my = -0.75f;
+                    my = 0.75f;
                     if (dirX > 0.0f)
                     {
                         mx = 0.5f;
@@ -380,7 +381,7 @@ public class enemyBear : MonoBehaviour, Enemy
                 GameObject temp = grid.objects[(int)Mathf.Floor(moveTo.x), (int)Mathf.Round(moveTo.y / 0.75f)];
                 tile = temp.GetComponent(typeof(tileData)) as tileData;
                 int iter = 0;
-                while((tile.enemy!=null || tile.blocked || tile.isNull || tile.city || tile.tank != null) && iter < 6)
+                while((tile.enemy!=null || tile.blocked || tile.isNull || tile.city || tile.tank != null || tile.isWater) && iter < 6)
                 {
                     if (mx > 0.0f)
                     {
@@ -390,7 +391,7 @@ public class enemyBear : MonoBehaviour, Enemy
                             my = 0.0f;
                             moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
                         }
-                        else if (my == 0.0f)
+                        else if ((int)my == 0)
                         {
                             mx = 0.5f;
                             my = -0.75f;
@@ -411,7 +412,7 @@ public class enemyBear : MonoBehaviour, Enemy
                             my = 0.0f;
                             moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
                         }
-                        else if(my == 0.0f)
+                        else if((int)my == 0)
                         {
                             mx = -0.5f;
                             my = -0.75f;
@@ -425,8 +426,11 @@ public class enemyBear : MonoBehaviour, Enemy
                         }
                     }
                     iter++;
-                    temp = grid.objects[(int)Mathf.Floor(moveTo.x), (int)Mathf.Round(moveTo.y / 0.75f)];
-                    tile = temp.GetComponent(typeof(tileData)) as tileData;
+                    if((int)Mathf.Floor(moveTo.x)>=0 && (int)Mathf.Floor(moveTo.x)<grid.getCols() && (int)Mathf.Round(moveTo.y/0.75f)>=0 && (int)Mathf.Round(moveTo.y / 0.75f) < grid.getRows())
+                    {
+                        temp = grid.objects[(int)Mathf.Floor(moveTo.x), (int)Mathf.Round(moveTo.y / 0.75f)];
+                        tile = temp.GetComponent(typeof(tileData)) as tileData;
+                    }
                 }
                 if(iter == 6)
                 {
@@ -436,6 +440,7 @@ public class enemyBear : MonoBehaviour, Enemy
                 StartCoroutine(moveTile(moveTo));
                 while (isRunning)
                 {
+                    Debug.Log(isRunning);
                     yield return new WaitForEndOfFrame();
                 }
                 finalPosition = moveTo;
@@ -452,39 +457,39 @@ public class enemyBear : MonoBehaviour, Enemy
             while (!done)
             {
 
-                if (tileToHitDiff.y > this.transform.position.y)
+                if ((int)Mathf.Round(tileToHitDiff.y / 0.75f) > (int)Mathf.Round(this.transform.position.y / 0.75f))
                 {
-                    if (tileToHitDiff.x < this.transform.position.x)
-                    {
-                        moveTo = new Vector3(pos.x - 0.5f, pos.y + 0.75f, pos.z);
-                        mx = -0.5f;
-                        my = 0.75f;
-                    }
-                    else
+                    if ((int)Mathf.Floor(this.transform.position.x) < (int)Mathf.Floor(tileToHitDiff.x))
                     {
                         moveTo = new Vector3(pos.x + 0.5f, pos.y + 0.75f, pos.z);
                         mx = 0.5f;
                         my = 0.75f;
                     }
-                }
-                else if (tileToHitDiff.y < this.transform.position.y)
-                {
-                    if (tileToHitDiff.x < pos.x)
-                    {
-                        moveTo = new Vector3(pos.x - 0.5f, pos.y - 0.75f, pos.z);
-                        mx = -0.5f;
-                        my = -0.75f;
-                    }
                     else
+                    {
+                        moveTo = new Vector3(pos.x - 0.5f, pos.y + 0.75f, pos.z);
+                        mx = -0.5f;
+                        my = 0.75f;
+                    }
+                }
+                else if ((int)Mathf.Round(tileToHitDiff.y / 0.75f) < (int)Mathf.Round(this.transform.position.y / 0.75f))
+                {
+                    if ((int)Mathf.Floor(this.transform.position.x) < (int)Mathf.Floor(tileToHitDiff.x))
                     {
                         moveTo = new Vector3(pos.x + 0.5f, pos.y - 0.75f, pos.z);
                         mx = 0.5f;
                         my = -0.75f;
                     }
+                    else
+                    {
+                        moveTo = new Vector3(pos.x - 0.5f, pos.y - 0.75f, pos.z);
+                        mx = -0.5f;
+                        my = -0.75f;
+                    }
                 }
                 else
                 {
-                    if (tileToHitDiff.x < pos.x)
+                    if ((int)Mathf.Floor(tileToHitDiff.x) < (int)Mathf.Floor(this.transform.position.x))
                     {
                         moveTo = new Vector3(pos.x - 1.0f, pos.y, pos.z);
                         mx = -1.0f;
@@ -497,7 +502,7 @@ public class enemyBear : MonoBehaviour, Enemy
                         my = 0.0f;
                     }
                 }
-                if(moveTo.x==tileToHitDiff.x && moveTo.y == tileToHitDiff.y)
+                if((int)Mathf.Floor(moveTo.x)==(int)Mathf.Floor(tileToHitDiff.x) && (int)Mathf.Round(moveTo.y / 0.75f) == (int)Mathf.Round(tileToHitDiff.y / 0.75f))
                 {
                     done = true;
                     finalPosition = this.transform.position;
@@ -506,7 +511,7 @@ public class enemyBear : MonoBehaviour, Enemy
                 {
                     GameObject temp = grid.objects[(int)Mathf.Floor(moveTo.x), (int)Mathf.Round(moveTo.y / 0.75f)];
                     tile = temp.GetComponent(typeof(tileData)) as tileData;
-                    while (tile.blocked || tile.isNull || tile.city || tile.tank != null)
+                    while (tile.blocked || tile.isNull || tile.city || tile.tank != null || tile.enemy != null ||  tile.isWater)
                     {
                         if (mx > 0.0f)
                         {
@@ -516,7 +521,7 @@ public class enemyBear : MonoBehaviour, Enemy
                                 my = 0.0f;
                                 moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
                             }
-                            else if (my == 0.0f)
+                            else if ((int)my == 0)
                             {
                                 mx = 0.5f;
                                 my = -0.75f;
@@ -537,7 +542,7 @@ public class enemyBear : MonoBehaviour, Enemy
                                 my = 0.0f;
                                 moveTo = new Vector3(pos.x + mx, pos.y + my, pos.z);
                             }
-                            else if (my == 0.0f)
+                            else if ((int)my == 0)
                             {
                                 mx = -0.5f;
                                 my = -0.75f;
@@ -560,19 +565,21 @@ public class enemyBear : MonoBehaviour, Enemy
                         yield return new WaitForEndOfFrame();
                     }
                     finalPosition = moveTo;
+                    pos = this.transform.position;
                 }
             }
             tileToHitDiff.x = tileToHitDiff.x - this.transform.position.x;
             tileToHitDiff.y = tileToHitDiff.y - this.transform.position.y;
             tileToHit = Instantiate(hitTile, new Vector3(this.transform.position.x + tileToHitDiff.x, this.transform.position.y + tileToHitDiff.y, this.transform.position.z),Quaternion.identity);
-            cur = grid.objects[(int)Mathf.Floor(originalPosition.x), (int)Mathf.Round(originalPosition.y / 0.75f)];
-            tile = cur.GetComponent(typeof(tileData)) as tileData;
-            tile.enemy = null;
-            cur = grid.objects[(int)Mathf.Floor(finalPosition.x), (int)Mathf.Round(finalPosition.y / 0.75f)];
-            tile = cur.GetComponent(typeof(tileData)) as tileData;
-            tile.enemy = this;
-            this.tile = tile;
         }
+        cur = grid.objects[(int)Mathf.Floor(originalPosition.x), (int)Mathf.Round(originalPosition.y / 0.75f)];
+        tile = cur.GetComponent(typeof(tileData)) as tileData;
+        tile.enemy = null;
+        cur = grid.objects[(int)Mathf.Floor(finalPosition.x), (int)Mathf.Round(finalPosition.y / 0.75f)];
+        tile = cur.GetComponent(typeof(tileData)) as tileData;
+        tile.enemy = this;
+        this.tile = tile;
+        waiting = false;
     }
     IEnumerator moveTile(Vector3 pos)
     {
