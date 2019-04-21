@@ -229,6 +229,13 @@ public class BoardManager : MonoBehaviour
         tanks[0].transform.position = spawnPos[0];
         tanks[1].transform.position = spawnPos[1];
         tanks[2].transform.position = spawnPos[2];
+        tileData tile;
+        tile = objects[(int)Mathf.Floor(spawnPos[0].x), (int)Mathf.Round(spawnPos[0].y / 0.75f)].GetComponent(typeof(tileData)) as tileData;
+        tile.tank = tanks[0].GetComponent(typeof(Tank)) as Tank;
+        tile = objects[(int)Mathf.Floor(spawnPos[1].x), (int)Mathf.Round(spawnPos[1].y / 0.75f)].GetComponent(typeof(tileData)) as tileData;
+        tile.tank = tanks[1].GetComponent(typeof(Tank)) as Tank;
+        tile = objects[(int)Mathf.Floor(spawnPos[2].x), (int)Mathf.Round(spawnPos[2].y / 0.75f)].GetComponent(typeof(tileData)) as tileData;
+        tile.tank = tanks[2].GetComponent(typeof(Tank)) as Tank;
         initialized = true;
     }
     public void endTurnButton()

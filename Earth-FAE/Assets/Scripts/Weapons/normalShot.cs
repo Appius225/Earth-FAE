@@ -135,7 +135,7 @@ public class normalShot : MonoBehaviour , Weapon
             int i;
             for(i = 1;Mathf.Floor(pos.x+0.5f*i)<grid.getCols() && Mathf.Round((pos.y - i * 0.75f) / 0.75f) >= 0; i++)
             {
-                tile = (grid.objects[(int)Mathf.Floor(pos.x + 0.5f * i), (int)Mathf.Round((pos.y + i * 0.75f) / 0.75f)].GetComponent(typeof(tileData)) as tileData);
+                tile = (grid.objects[(int)Mathf.Floor(pos.x + 0.5f * i), (int)Mathf.Round((pos.y - i * 0.75f) / 0.75f)].GetComponent(typeof(tileData)) as tileData);
                 if (tile.city)
                 {
                     //animation
@@ -213,7 +213,7 @@ public class normalShot : MonoBehaviour , Weapon
             int i;
             for (i = 1; Mathf.Floor(pos.x - 0.5f * i) >= 0 && Mathf.Round((pos.y - i * 0.75f) / 0.75f) >= 0; i++)
             {
-                tile = (grid.objects[(int)Mathf.Floor(pos.x + 0.5f * i), (int)Mathf.Round((pos.y + i * 0.75f) / 0.75f)].GetComponent(typeof(tileData)) as tileData);
+                tile = (grid.objects[(int)Mathf.Floor(pos.x - (0.5f * i)), (int)Mathf.Round((pos.y - (i * 0.75f)) / 0.75f)].GetComponent(typeof(tileData)) as tileData);
                 if (tile.city)
                 {
                     //animation
@@ -251,7 +251,7 @@ public class normalShot : MonoBehaviour , Weapon
     public bool[,] tilesHittable(Vector3 position)
     {
         BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
-        bool[,] hitTiles = new bool[grid.getRows(), grid.getCols()];
+        bool[,] hitTiles = new bool[grid.getCols(), grid.getRows()];
         int x = (int)Mathf.Floor(position.x);
         int y = (int)Mathf.Round(position.y / 0.75f);
         for(int i = 0; i < hitTiles.GetLength(0); i++)

@@ -37,7 +37,7 @@ public class Tank : MonoBehaviour
     void Awake()
     {
         grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
-        hittableTiles = new GameObject[grid.getRows(), grid.getCols()];
+        hittableTiles = new GameObject[grid.getCols(), grid.getRows()];
         moveTiles = new GameObject[grid.getRows(), grid.getCols()];
         actions = maxActions;
         weap1 = new normalShot();
@@ -63,6 +63,7 @@ public class Tank : MonoBehaviour
         Queue<GameObject>[] queues = new Queue<GameObject>[movement];
         GameObject cur;
         tileData tile;
+        moveTilesDisp = true;
         for(int i = 0; i < movement; i++)
         {
             queues[i] = new Queue<GameObject>();
@@ -87,7 +88,7 @@ public class Tank : MonoBehaviour
                 tile = cur.GetComponent(typeof(tileData)) as tileData;
                 if (!tile.city && (tile.enemy==null)  && !tile.blocked && !tile.isNull)
                 {
-                    if(moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] == null && cur.transform.position != grid.objects[(int)Mathf.Floor(this.transform.position.x),(int)Mathf.Round(this.transform.position.y/0.75f)].transform.position)
+                    if(moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] == null && cur.transform.position != grid.objects[(int)Mathf.Floor(this.transform.position.x),(int)Mathf.Round(this.transform.position.y/0.75f)].transform.position && tile.tank == null)
                     {
                         moveTiles[(int)Mathf.Floor(cur.transform.position.x), (int)Mathf.Round(cur.transform.position.y / 0.75f)] = Instantiate(greenTile, new Vector3(cur.transform.position.x, cur.transform.position.y, -0.02f), Quaternion.identity) as GameObject;
                     }
@@ -235,6 +236,7 @@ public class Tank : MonoBehaviour
                         {
                             hittableTiles[i,j] = Instantiate(redTile, new Vector3(i, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
                         }
+
                     }
                 }
             }
@@ -307,10 +309,64 @@ public class Tank : MonoBehaviour
     {
         if (actions > 2)
         {
+            GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");
+            if (tanks.GetLength(0) > 0)
+            {
+                foreach(GameObject temp in tanks)
+                {
+                    Tank t = temp.GetComponent(typeof(Tank)) as Tank;
+                    t.hideMoveableTiles();
+                }
+            }
+            tanks = GameObject.FindGameObjectsWithTag("Firing1");
+            if (tanks.GetLength(0) > 0)
+            {
+                foreach(GameObject temp in tanks)
+                {
+                    Tank t = temp.GetComponent(typeof(Tank)) as Tank;
+                    t.removeHitTiles();
+                }
+            }
+            tanks = GameObject.FindGameObjectsWithTag("Firing2");
+            if (tanks.GetLength(0) > 0)
+            {
+                foreach (GameObject temp in tanks)
+                {
+                    Tank t = temp.GetComponent(typeof(Tank)) as Tank;
+                    t.removeHitTiles();
+                }
+            }
             showMovableTiles();
         }
         else if(actions > 1)
         {
+            GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");
+            if (tanks.GetLength(0) > 0)
+            {
+                foreach (GameObject temp in tanks)
+                {
+                    Tank t = temp.GetComponent(typeof(Tank)) as Tank;
+                    t.hideMoveableTiles();
+                }
+            }
+            tanks = GameObject.FindGameObjectsWithTag("Firing1");
+            if (tanks.GetLength(0) > 0)
+            {
+                foreach (GameObject temp in tanks)
+                {
+                    Tank t = temp.GetComponent(typeof(Tank)) as Tank;
+                    t.removeHitTiles();
+                }
+            }
+            tanks = GameObject.FindGameObjectsWithTag("Firing2");
+            if (tanks.GetLength(0) > 0)
+            {
+                foreach (GameObject temp in tanks)
+                {
+                    Tank t = temp.GetComponent(typeof(Tank)) as Tank;
+                    t.removeHitTiles();
+                }
+            }
             showHittableTiles1();
         }
     }
