@@ -6,7 +6,8 @@ public class Tank : MonoBehaviour
 {
     private BoardManager grid;
     private int movement = 4;
-    private int health = 3;
+    public int maxHealth = 3;
+    public int health = 3;
     public int maxActions = 3;
     public int actions;
     public bool OnFire = false;
@@ -324,6 +325,6 @@ public class Tank : MonoBehaviour
     }
     void die()
     {
-
+        Destroy(this);
     }
 }

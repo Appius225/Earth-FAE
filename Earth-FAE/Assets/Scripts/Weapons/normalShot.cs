@@ -15,7 +15,7 @@ public class normalShot : MonoBehaviour , Weapon
             if (target.x > pos.x)
             {
                 int i;
-                for(i = (int)Mathf.Floor(pos.x); i < grid.getCols(); i++)
+                for(i = (int)Mathf.Floor(pos.x + 1.0f); i < grid.getCols(); i++)
                 {
                     tile = (grid.objects[i,y].GetComponent(typeof(tileData)) as tileData);
                     if (tile.city)
@@ -54,7 +54,7 @@ public class normalShot : MonoBehaviour , Weapon
             else
             {
                 int i;
-                for (i = (int)Mathf.Floor(pos.x); i >= 0; i--)
+                for (i = (int)Mathf.Floor(pos.x - 1.0f); i >= 0; i--)
                 {
                     tile = (grid.objects[i, y].GetComponent(typeof(tileData)) as tileData);
                     if (tile.city)
@@ -65,27 +65,27 @@ public class normalShot : MonoBehaviour , Weapon
                         {
                             //lose game
                         }
-                        i = 100;
+                        i = -100;
                     }
                     else if (tile.blocked)
                     {
-                        i = 100;
+                        i = -100;
                         //run animation
                     }
                     else if (tile.enemy != null)
                     {
                         //animation
                         tile.enemy.damage(damage);
-                        i = 100;
+                        i = -100;
                     }
                     else if (tile.tank != null)
                     {
                         //animation
                         tile.tank.damage(damage);
-                        i = 100;
+                        i = -100;
                     }
                 }
-                if (i != 100)
+                if (i != -100)
                 {
                     //miss animation
                 }

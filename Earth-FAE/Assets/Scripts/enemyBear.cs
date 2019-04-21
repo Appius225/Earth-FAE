@@ -193,7 +193,7 @@ public class enemyBear : MonoBehaviour, Enemy
                         targetFound = true;
                         tileToHitDiff = new Vector3(cur.transform.position.x,cur.transform.position.y,cur.transform.position.z);
                     }
-                    else if ((tile.tank == null) && !tile.blocked && tile.isNull)
+                    else if ((tile.tank == null) && !tile.blocked && tile.isNull && (tile.enemy == null))
                     {
                         GameObject temp;
                         bool found;
@@ -496,7 +496,7 @@ public class enemyBear : MonoBehaviour, Enemy
                         my = 0.0f;
                     }
                 }
-                if(moveTo.x==tileToHitDiff.x && moveTo.y == tileToHitDiff.y && moveTo.z == tileToHitDiff.z)
+                if(moveTo.x==tileToHitDiff.x && moveTo.y == tileToHitDiff.y)
                 {
                     done = true;
                     finalPosition = this.transform.position;
@@ -561,7 +561,7 @@ public class enemyBear : MonoBehaviour, Enemy
                     finalPosition = moveTo;
                 }
             }
-            tileToHitDiff.x = tileToHitDiff.y - this.transform.position.x;
+            tileToHitDiff.x = tileToHitDiff.x - this.transform.position.x;
             tileToHitDiff.y = tileToHitDiff.y - this.transform.position.y;
             tileToHit = Instantiate(hitTile, new Vector3(this.transform.position.x + tileToHitDiff.x, this.transform.position.y + tileToHitDiff.y, this.transform.position.z),Quaternion.identity);
             cur = grid.objects[(int)Mathf.Floor(originalPosition.x), (int)Mathf.Round(originalPosition.y / 0.75f)];
