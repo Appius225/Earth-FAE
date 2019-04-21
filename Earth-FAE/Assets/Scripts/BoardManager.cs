@@ -27,6 +27,9 @@ public class BoardManager : MonoBehaviour
     private bool waiting;
     private GameObject[,] spawningPos;
 
+    public float difficulty = 2;
+    public GameObject[] enemyFabs;
+
     public Boolean turnEnded;
     public GameObject endTurn;
 
@@ -284,7 +287,21 @@ public class BoardManager : MonoBehaviour
     }
     IEnumerator enemySpawn()
     {
-        yield return new WaitForEndOfFrame();
+        int num = UnityEngine.Random.Range(2, (int)Mathf.Floor(difficulty) + 1);
+        GameObject temp;
+        for(int i = 0; i < num; i++)
+        {
+            int y = UnityEngine.Random.Range(0, rows);
+            int x = UnityEngine.Random.Range(columns * 2 / 3 - 1, columns);
+            temp = Instantiate(enemyFabs[UnityEngine.Random.Range(0, enemyFabs.GetLength(0))], new Vector3(x, 12, -0.1f), Quaternion.identity) as GameObject;
+            float elapsedTime = 0.0f;
+            while (elapsedTime > 0.5f)
+            {
+                temp.transform.position = Vector3.Lerp(new Vector3(x, 12, -0.1f), new Vector3(x, y, -0.1f), elapsedTime / 0.5f);
+                elapsedTime += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+        }
         waiting = false;
     }
     IEnumerator enemyNewSpawns()
@@ -391,7 +408,7 @@ public class BoardManager : MonoBehaviour
         MainCamera = Camera.main;
 
         MainCamera.transform.position = screenCenter;
-        MainCamera.orthographicSize = ((rows - (rows * .25f)) / 2.0f) + 1.0f; // calculate the size of the camera
+        MainCamera.orthographicSize = ((rows - (rows * .25f)) / 2.0f) + 1.5f; // calculate the size of the camera
 
         StartCoroutine(testTankSpawn());
         StartCoroutine(turn());
