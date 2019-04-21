@@ -23,6 +23,7 @@ public class BoardManager : MonoBehaviour
     public bool[] cityRows;
     public int cityHealth = 10;
     private Transform boardContainer;
+    private Transform enemyContainer;
     public GameObject[,] objects; //2D array holding the initialized tiles
     private bool waiting;
     private GameObject[,] spawningPos;
@@ -151,6 +152,7 @@ public class BoardManager : MonoBehaviour
     void BoardSetup()
     {
         boardContainer = new GameObject("Container").transform;
+        enemyContainer = new GameObject("Enemy Container").transform;
         int cities = 0;
         for (int y = 0; y < rows; y++)
         {
@@ -188,6 +190,10 @@ public class BoardManager : MonoBehaviour
 
     IEnumerator testTankSpawn()
     {
+        while (waiting)
+        {
+            yield return new WaitForEndOfFrame();
+        }
         GameObject[,] spawnable = new GameObject[2, rows];
         for(int x = 0; x < 2; x++)
         {
@@ -236,7 +242,7 @@ public class BoardManager : MonoBehaviour
         tile.tank = tanks[1].GetComponent(typeof(Tank)) as Tank;
         tile = objects[(int)Mathf.Floor(spawnPos[2].x), (int)Mathf.Round(spawnPos[2].y / 0.75f)].GetComponent(typeof(tileData)) as tileData;
         tile.tank = tanks[2].GetComponent(typeof(Tank)) as Tank;
-        initialized = true;
+        spawned = true;
     }
     public void endTurnButton()
     {
@@ -315,6 +321,10 @@ public class BoardManager : MonoBehaviour
                 x += 0.5f;
             }
             y = y * 0.75f;
+            while(tile.enemy!=null || tile.isWater || tile.blocked || tile.city || tile.tank != null)
+            {
+
+            }
             temp = Instantiate(enemyFabs[UnityEngine.Random.Range(0, enemyFabs.GetLength(0))], new Vector3(12, y, -0.1f), Quaternion.identity) as GameObject;
             float elapsedTime = 0.0f;
             while (elapsedTime < 0.5f)
@@ -324,13 +334,9 @@ public class BoardManager : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
             temp.transform.position = new Vector3(x, y, -0.1f);
+            temp.transform.SetParent(enemyContainer);
             tile.enemy = temp.GetComponent(typeof(Enemy)) as Enemy;
         }
-        waiting = false;
-    }
-    IEnumerator enemyNewSpawns()
-    {
-        yield return new WaitForEndOfFrame();
         waiting = false;
     }
     void fire()
@@ -394,6 +400,10 @@ public class BoardManager : MonoBehaviour
     }
     IEnumerator enemyMove()
     {
+        while (!spawned)
+        {
+            yield return new WaitForEndOfFrame();
+        }
         tileData tile;
         for(int i = 0; i < columns; i++)
         {
@@ -413,6 +423,7 @@ public class BoardManager : MonoBehaviour
             }
         }
         waiting = false;
+        initialized = true;
     }
     public void damageCity(int d)
     {
@@ -436,7 +447,11 @@ public class BoardManager : MonoBehaviour
         MainCamera.transform.position = screenCenter;
         MainCamera.orthographicSize = ((rows - (rows * .25f)) / 2.0f) + 1.5f; // calculate the size of the camera
 
+        waiting = true;
+        spawned = false;
+        StartCoroutine(enemySpawn());
         StartCoroutine(testTankSpawn());
+        StartCoroutine(enemyMove());
         StartCoroutine(turn());
     }
 }
