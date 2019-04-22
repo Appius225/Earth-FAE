@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tank : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class Tank : MonoBehaviour
     private GameObject[,] hittableTiles;
     private bool hitTilesDisp = false;
     public Vector3[] prevMove;
+    public Image healthBar;
+
     void Update()
     {
         if (Input.GetMouseButtonDown(1))
@@ -410,6 +413,7 @@ public class Tank : MonoBehaviour
         for (int i = 1; i <= d && health > 0; i++)
         {
             health--;
+            healthBar.fillAmount = health / maxHealth;
         }
         if (health == 0)
             this.die();
