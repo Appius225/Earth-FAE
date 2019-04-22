@@ -362,4 +362,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitTile: {fileID: 3378288817092818244, guid: 91b74bf286bb69f449685b2a058f7c91, type: 3}
-  healthBar: {fileID: 3049504594553135722}

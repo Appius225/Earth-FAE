@@ -378,4 +378,3 @@ MonoBehaviour:
     type: 3}
   redTile: {fileID: 8161859859185562762, guid: 80f270236b628b64fb99efa5a761be21, type: 3}
   prevMove: []
-  healthBar: {fileID: 6467444723151894492}
