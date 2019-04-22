@@ -56,6 +56,14 @@ public class BoardManager : MonoBehaviour
             (tank.GetComponent(typeof(Tank)) as Tank).showHittableTiles2();
         }
     }
+    public void repair()
+    {
+        GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");
+        foreach(GameObject tank in tanks)
+        {
+            (tank.GetComponent(typeof(Tank)) as Tank).repair();
+        }
+    }
     public void undo()
     {
         int i;
@@ -82,6 +90,7 @@ public class BoardManager : MonoBehaviour
             cur = prevMove[i];
             (objects[(int)Mathf.Floor(cur.x), (int)Mathf.Round(cur.y / 0.75f)].GetComponent(typeof(tileData)) as tileData).tank = t;
             t.transform.position = prevMove[i];
+            t.actions++;
             prevMove[i] = def;
             prevTank[i] = 3;
         }
