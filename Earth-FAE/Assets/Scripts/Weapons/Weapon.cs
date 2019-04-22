@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface Weapon
 {
-    void fire(Vector3 start, Vector3 target);
+    IEnumerator fire(Vector3 start, Vector3 target);
     bool[,] tilesHittable(Vector3 start);
 }

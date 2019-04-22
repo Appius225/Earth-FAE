@@ -22,6 +22,10 @@ public class enemyBear : MonoBehaviour, Enemy
     public bool isWaiting { get { return this.waiting; } set { this.waiting = value; } }
     public Image healthBar;
 
+    public GameObject getGameObject()
+    {
+        return gameObject;
+    }
     public IEnumerator move()
     {
         BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));

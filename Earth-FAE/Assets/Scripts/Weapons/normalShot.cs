@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class normalShot : MonoBehaviour , Weapon
 {
-    public int damage = 1;
-    public void fire(Vector3 pos, Vector3 target)
+    public int damage = 2;
+    public IEnumerator fire(Vector3 pos, Vector3 target)
     {
         BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
         tileData tile;
@@ -247,6 +247,7 @@ public class normalShot : MonoBehaviour , Weapon
                 //miss animation
             }
         }
+        yield return new WaitForSeconds(0.1f);
     }
     public bool[,] tilesHittable(Vector3 position)
     {
