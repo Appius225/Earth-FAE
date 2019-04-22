@@ -38,7 +38,7 @@ public class Tank : MonoBehaviour
             }
         }
     }
-    void Awake()
+    public void init()
     {
         grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
         hittableTiles = new GameObject[grid.getCols(), grid.getRows()];

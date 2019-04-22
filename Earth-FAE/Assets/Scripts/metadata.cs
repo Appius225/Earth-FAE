@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class metadata
 {
-    private static GameObject[] tanks;
+    private static GameObject[] tanks = new GameObject[3];
     private static float difficulty = 2.0f;
     public static GameObject[] Tanks
     {

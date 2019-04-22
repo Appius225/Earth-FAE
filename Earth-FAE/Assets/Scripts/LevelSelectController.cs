@@ -62,11 +62,7 @@ public class LevelSelectController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            if(iTank[0] == null && iTank[1] == null && iTank[2] == null)
-            {
-
-                iTank[i] = Instantiate(tanks[tankLoad[i]], new Vector3(100, 100, 0), Quaternion.identity);
-            }
+            iTank[i] = Instantiate(tanks[tankLoad[i]], new Vector3(100, 100, 0), Quaternion.identity);
             DontDestroyOnLoad(iTank[i]);
             Tank t = iTank[i].GetComponent(typeof(Tank)) as Tank;
             if (i == 0) //tank 1
