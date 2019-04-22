@@ -301,7 +301,7 @@ public class enemyBear : MonoBehaviour, Enemy
             {
                 cur = queues[movement].Dequeue();
                 tile = cur.GetComponent(typeof(tileData)) as tileData;
-                if (tile.city)
+                if (tile.tank != null)
                 {
                     targetFound = true;
                     tileToHitDiff = new Vector3(cur.transform.position.x,cur.transform.position.y,cur.transform.position.z);
@@ -590,26 +590,30 @@ public class enemyBear : MonoBehaviour, Enemy
     public IEnumerator attack()
     {
         BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
-        Vector3 target = new Vector3(this.transform.position.x + tileToHitDiff.x,this.transform.position.y + tileToHitDiff.y,0.0f);
-        if(target.x>0 && target.x<grid.getCols() && target.y>0 && target.y < grid.getRows())
+        Vector3 def = new Vector3(0, 0, 0);
+        if(tileToHitDiff != def)
         {
-            GameObject hit = grid.objects[(int)Mathf.Floor(target.x), (int)Mathf.Round(target.y / 0.75f)];
-            tileData tile = hit.GetComponent(typeof(tileData)) as tileData;
-            if (tile.city)
+            Vector3 target = new Vector3(this.transform.position.x + tileToHitDiff.x, this.transform.position.y + tileToHitDiff.y, 0.0f);
+            if (target.x > 0 && target.x < grid.getCols() && target.y > 0 && target.y < grid.getRows())
             {
-                grid.damageCity(dmg);
+                GameObject hit = grid.objects[(int)Mathf.Floor(target.x), (int)Mathf.Round(target.y / 0.75f)];
+                tileData tile = hit.GetComponent(typeof(tileData)) as tileData;
+                if (tile.city)
+                {
+                    grid.damageCity(dmg);
+                }
+                else if (tile.enemy != null)
+                {
+                    tile.enemy.damage(dmg);
+                }
+                else if (tile.tank != null)
+                {
+                    tile.tank.damage(dmg);
+                }
             }
-            else if (tile.enemy != null)
-            {
-                tile.enemy.damage(dmg);
-            }
-            else if(tile.tank != null)
-            {
-                tile.tank.damage(dmg);
-            }
+            Destroy(tileToHit);
+            yield return new WaitForSeconds(0.5f);
         }
-        Destroy(tileToHit);
-        yield return new WaitForSeconds(0.5f);
         waiting = false;
     }
     public void damage(int d)
@@ -618,6 +622,7 @@ public class enemyBear : MonoBehaviour, Enemy
         {
             health--;
         }
+        Debug.Log(health);
         if (health == 0)
         {
             this.die();
@@ -626,6 +631,8 @@ public class enemyBear : MonoBehaviour, Enemy
     public void die()
     {
         //animation
-        Destroy(this);
+        BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
+        ((grid.objects[(int)Mathf.Floor(this.transform.position.x), (int)Mathf.Round(this.transform.position.y / 0.75f)]).GetComponent(typeof(tileData)) as tileData).enemy = null;
+        Destroy(gameObject);
     }
 }

@@ -10,16 +10,19 @@ public class movement : MonoBehaviour
         foreach (GameObject tank in tanks)
         {
             Tank t = (tank.GetComponent(typeof(Tank))) as Tank;
+            BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
             Vector3 def = new Vector3(0, 0, 0);
-            for(int i = 0; i < t.maxActions; i++)
+            bool done = false;
+            for(int i = 0; i < t.maxActions && !done; i++)
             {
-                if (t.prevMove[i] == def)
+                if (grid.prevMove[i] == def)
                 {
-                    t.prevMove[i] = t.transform.position;
+                    grid.prevMove[i] = t.transform.position;
+                    grid.prevTank[i] = t.id;
+                    done = true;
                 }
             }
             Vector3 pos = t.transform.position;
-            BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
             GameObject cur = grid.objects[(int)Mathf.Floor(pos.x), (int)Mathf.Round(pos.y / 0.75f)];
             tileData tile = cur.GetComponent(typeof(tileData)) as tileData;
             tile.tank = null;

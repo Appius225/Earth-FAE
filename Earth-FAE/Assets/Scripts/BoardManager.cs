@@ -27,6 +27,8 @@ public class BoardManager : MonoBehaviour
     public GameObject[,] objects; //2D array holding the initialized tiles
     private bool waiting;
     private GameObject[,] spawningPos;
+    public Vector3[] prevMove;
+    public int[] prevTank;
 
     public float difficulty = 2;
     public GameObject[] enemyFabs;
@@ -36,6 +38,64 @@ public class BoardManager : MonoBehaviour
 
     Camera MainCamera;
     public static Vector3 screenCenter;
+
+
+    public void showFire1()
+    {
+        GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");
+        foreach(GameObject tank in tanks)
+        {
+            (tank.GetComponent(typeof(Tank)) as Tank).showHittableTiles1();
+        }
+    }
+    public void showFire2()
+    {
+        GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");
+        foreach (GameObject tank in tanks)
+        {
+            (tank.GetComponent(typeof(Tank)) as Tank).showHittableTiles2();
+        }
+    }
+    public void undo()
+    {
+        int i;
+        bool done = false;
+        Vector3 def = new Vector3(0, 0, 0);
+        for(i = 0; !done && i < prevMove.Length; i++)
+        {
+            if(prevMove[i] == def)
+            {
+                i--;
+                done = true;
+            }
+        }
+        i--;
+        if (!done)
+        {
+            i = prevMove.Length - 1;
+        }
+        if(i >= 0)
+        {
+            Tank t = tanks[prevTank[i]].GetComponent(typeof(Tank)) as Tank;
+            Vector3 cur = t.transform.position;
+            (objects[(int)Mathf.Floor(cur.x), (int)Mathf.Round(cur.y / 0.75f)].GetComponent(typeof(tileData)) as tileData).tank = null;
+            cur = prevMove[i];
+            (objects[(int)Mathf.Floor(cur.x), (int)Mathf.Round(cur.y / 0.75f)].GetComponent(typeof(tileData)) as tileData).tank = t;
+            t.transform.position = prevMove[i];
+            prevMove[i] = def;
+            prevTank[i] = 3;
+        }
+    }
+    public void flushUndo()
+    {
+        Vector3 def = new Vector3(0, 0, 0);
+        for(int i = 0; i < prevMove.Length; i++)
+        {
+            prevMove[i] = def;
+            prevTank[i] = 3;
+        }
+    }
+
     public int getRows()
     {
         return rows;
@@ -199,10 +259,14 @@ public class BoardManager : MonoBehaviour
         {
             for(int y = 0; y < rows; y++)
             {
-                if (y % 2 == 1 && x != 1)
-                    spawnable[x,y] = Instantiate(spawn, new Vector3(x + 0.5f, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
-                else if (!(y%2==1 && x==1))
-                    spawnable[x,y] = Instantiate(spawn, new Vector3(x, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
+                tileData t = objects[x, y].GetComponent(typeof(tileData)) as tileData;
+                if(!t.city && !t.isWater && !t.isNull && !t.blocked)
+                {
+                    if (y % 2 == 1)
+                        spawnable[x, y] = Instantiate(spawn, new Vector3(x + 0.5f, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
+                    else if (!(y % 2 == 1 && x == 1))
+                        spawnable[x, y] = Instantiate(spawn, new Vector3(x, y - (y * .25f), -0.1f), Quaternion.identity) as GameObject;
+                }
             }
         }
         Vector3 def = new Vector3(0.0f, 0.0f, 0.0f);
@@ -222,7 +286,12 @@ public class BoardManager : MonoBehaviour
         {
             startPos[i] = new Vector3(spawnPos[i].x - 5.0f,spawnPos[i].y,spawnPos[i].z);
             tanks[i] = Instantiate(tank,startPos[i],Quaternion.identity) as GameObject;
+            Tank temp = tanks[i].GetComponent(typeof(Tank)) as Tank;
+            temp.weap1 = metadata.Tanks[i].weap1;
+            temp.weap2 = metadata.Tanks[i].weap2;
+            temp.id = i;
         }
+        difficulty = metadata.Difficulty;
         float elapsedTime = 0.0f;
         while (elapsedTime < 0.5f)
         {
@@ -242,13 +311,20 @@ public class BoardManager : MonoBehaviour
         tile.tank = tanks[1].GetComponent(typeof(Tank)) as Tank;
         tile = objects[(int)Mathf.Floor(spawnPos[2].x), (int)Mathf.Round(spawnPos[2].y / 0.75f)].GetComponent(typeof(tileData)) as tileData;
         tile.tank = tanks[2].GetComponent(typeof(Tank)) as Tank;
+        int num = 0;
+        for(int i = 0; i < tanks.Length; i++)
+        {
+            Tank t = tanks[i].GetComponent(typeof(Tank)) as Tank;
+            t.id = i;
+            num += t.maxActions;
+        }
+        prevMove = new Vector3[num];
+        prevTank = new int[num];
         spawned = true;
     }
     public void endTurnButton()
     {
         turnEnded = true;
-
-
     }
     IEnumerator turn()
     {
@@ -257,6 +333,7 @@ public class BoardManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         //GameObject endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+        flushUndo();
         for(int i = 0; i < 5; i++)
         {
             while (!turnEnded)

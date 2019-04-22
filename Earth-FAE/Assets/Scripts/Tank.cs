@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Tank : MonoBehaviour
 {
+    public int id;
     private BoardManager grid;
     private int movement = 4;
     public int maxHealth = 3;
@@ -11,8 +12,8 @@ public class Tank : MonoBehaviour
     public int maxActions = 3;
     public int actions;
     public bool OnFire = false;
-    private Weapon weap1;
-    private Weapon weap2;
+    public Weapon weap1;
+    public Weapon weap2;
     public GameObject greenTile;
     private GameObject[,] moveTiles;
     private bool moveTilesDisp = false;
@@ -87,6 +88,7 @@ public class Tank : MonoBehaviour
                 OnFire = false;
             else
                 OnFire = true;
+            grid.flushUndo();
         }
     }
     void showMovableTiles()
@@ -248,7 +250,7 @@ public class Tank : MonoBehaviour
         }
         moveTilesDisp = false;
     }
-    void showHittableTiles1()
+    public void showHittableTiles1()
     {
         if(actions > 1)
         {
@@ -283,9 +285,10 @@ public class Tank : MonoBehaviour
             removeHitTiles();
             weap1.fire(this.transform.position,target);
             actions -= 2;
+            grid.flushUndo();
         }
     }
-    void showHittableTiles2()
+    public void showHittableTiles2()
     {
         if (actions > 1)
         {
