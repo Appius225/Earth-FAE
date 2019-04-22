@@ -32,7 +32,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] enemyFabs;
 
     public Boolean turnEnded;
-   // public GameObject endTurn;
+    //public GameObject endTurn;
 
     Camera MainCamera;
     public static Vector3 screenCenter;
@@ -302,7 +302,15 @@ public class BoardManager : MonoBehaviour
                 //endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
                 for(int j = 0; j < 3; j++)
                 {
+
                     (tanks[j].GetComponent(typeof(Tank)) as Tank).actions = (tanks[j].GetComponent(typeof(Tank)) as Tank).maxActions;
+                    Tank t = tanks[j].GetComponent(typeof(Tank)) as Tank;
+                    t.actions = t.maxActions;
+                    Vector3 def = new Vector3(0, 0, 0);
+                    for(int k = 0; k < t.maxActions; k++)
+                    {
+                        t.prevMove[k] = def;
+                    }
                 }
             }
             else
