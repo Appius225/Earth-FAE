@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class enemyBear : MonoBehaviour, Enemy
 {
-    private int movement = 4;
-    private int health = 4;
+    private int movement = 3;
+    private int health = 3;
     private int dmg = 2;
     private tileData tile;
     public tileData Tile { get { return this.tile; } set { this.tile = value; } }

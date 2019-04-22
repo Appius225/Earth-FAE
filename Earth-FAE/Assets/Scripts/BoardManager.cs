@@ -298,7 +298,13 @@ public class BoardManager : MonoBehaviour
                 //endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
                 for(int j = 0; j < 3; j++)
                 {
-                    (tanks[j].GetComponent(typeof(Tank)) as Tank).actions = (tanks[j].GetComponent(typeof(Tank)) as Tank).maxActions;
+                    Tank t = tanks[j].GetComponent(typeof(Tank)) as tank;
+                    t.actions = t.maxActions;
+                    Vector3 def = new Vector3(0, 0, 0);
+                    for(int i = 0; i < t.maxActions; i++)
+                    {
+                        t.prevMove[i] = def;
+                    }
                 }
             }
             else

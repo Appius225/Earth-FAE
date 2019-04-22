@@ -19,7 +19,7 @@ public class Tank : MonoBehaviour
     public GameObject redTile;
     private GameObject[,] hittableTiles;
     private bool hitTilesDisp = false;
-
+    public Vector3[] prevMove;
     void Update()
     {
         if (Input.GetMouseButtonDown(1))
@@ -41,6 +41,37 @@ public class Tank : MonoBehaviour
         moveTiles = new GameObject[grid.getRows(), grid.getCols()];
         actions = maxActions;
         weap1 = new normalShot();
+        prevMove = new Vector3[maxActions];
+    }
+    void undo()
+    {
+        Vector3 def = new Vector3(0, 0, 0);
+        int i;
+        bool done = false;
+        for(i = 0; i < maxActions && !done; i++)
+        {
+            if (prevMove[i] == def)
+            {
+                i--;
+                done = true;
+            }
+        }
+        if (!done)
+        {
+            i = maxActions - 1;
+        }
+        if (i >= 0)
+        {
+            if((grid.objects[(int)Mathf.Floor(prevMove[i].x), (int)Mathf.Round(prevMove[i].y/0.75f)].GetComponent(typeof(tileData))as tileData).tank != null)
+            {
+                Vector3 pos = this.transform.position;
+                tileData tile = grid.objects[(int)Mathf.Floor(pos.x), (int)Mathf.Round(pos.y / 0.75f)].GetComponent(typeof(tileData)) as tileData;
+                tile.tank = null;
+                tile = grid.objects[(int)Mathf.Floor(prevMove[i].x), (int)Mathf.Round(prevMove[i].y / 0.75f)].GetComponent(typeof(tileData)) as tileData;
+                tile.tank = this;
+                this.transform.position = prevMove[i];
+            }
+        }
     }
     void repair()
     {
