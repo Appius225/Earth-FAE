@@ -43,8 +43,9 @@ public class Tank : MonoBehaviour
         weap1 = new normalShot();
         prevMove = new Vector3[maxActions];
     }
-    void undo()
+    public void undo()
     {
+        Debug.Log("undo");
         Vector3 def = new Vector3(0, 0, 0);
         int i;
         bool done = false;
@@ -73,7 +74,7 @@ public class Tank : MonoBehaviour
             }
         }
     }
-    void repair()
+    public void repair()
     {
         if (actions > 0)
         {
