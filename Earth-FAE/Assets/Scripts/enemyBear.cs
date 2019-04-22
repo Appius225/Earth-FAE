@@ -624,7 +624,7 @@ public class enemyBear : MonoBehaviour, Enemy
         for(int i = 0; i < d && health > 0; i++)
         {
             health--;
-            healthBar.fillAmount = health / maxHealth;
+            healthBar.fillAmount = (float) health / maxHealth;
         }
         Debug.Log(health);
         if (health == 0)

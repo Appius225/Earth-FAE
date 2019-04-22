@@ -296,8 +296,9 @@ public class BoardManager : MonoBehaviour
             startPos[i] = new Vector3(spawnPos[i].x - 5.0f,spawnPos[i].y,spawnPos[i].z);
             tanks[i] = Instantiate(tank,startPos[i],Quaternion.identity) as GameObject;
             Tank temp = tanks[i].GetComponent(typeof(Tank)) as Tank;
-            temp.weap1 = metadata.Tanks[i].weap1;
-            temp.weap2 = metadata.Tanks[i].weap2;
+            temp.weap1 = new normalShot();
+            /*temp.weap1 = metadata.Tanks[i].weap1;
+            temp.weap2 = metadata.Tanks[i].weap2;*/
             temp.id = i;
         }
         difficulty = metadata.Difficulty;
