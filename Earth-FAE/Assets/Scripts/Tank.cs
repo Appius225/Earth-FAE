@@ -286,7 +286,7 @@ public class Tank : MonoBehaviour
         {
             this.tag = "Untagged";
             removeHitTiles();
-            weap1.fire(this.transform.position,target);
+            StartCoroutine(weap1.fire(this.transform.position,target));
             actions -= 2;
             grid.flushUndo();
         }
@@ -303,7 +303,7 @@ public class Tank : MonoBehaviour
                 {
                     if (hitTiles[i, j])
                     {
-                        if (i % 2 == 1)
+                        if (j % 2 == 1)
                         {
                             hittableTiles[i,j] = Instantiate(redTile, new Vector3(i + 0.5f, 0.75f * j, -0.1f), Quaternion.identity) as GameObject;
                         }
@@ -323,8 +323,9 @@ public class Tank : MonoBehaviour
         {
             this.tag = "Untagged";
             removeHitTiles();
-            weap2.fire(this.transform.position,target);
+            StartCoroutine(weap2.fire(this.transform.position,target));
             actions -= 2;
+            grid.flushUndo();
         }
     }
     void removeHitTiles()

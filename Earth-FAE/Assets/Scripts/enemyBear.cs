@@ -26,6 +26,13 @@ public class enemyBear : MonoBehaviour, Enemy
     {
         return gameObject;
     }
+    public void moveAttack(Vector3 shift)
+    {
+        if (tileToHit != null)
+        {
+            //tileToHit.transform.position = new Vector3(tileToHit.transform.position.x + shift.x, tileToHit.transform.position.y + shift.y, tileToHit.transform.position.z);
+        }
+    }
     public IEnumerator move()
     {
         BoardManager grid = (BoardManager)FindObjectOfType(typeof(BoardManager));
@@ -578,6 +585,7 @@ public class enemyBear : MonoBehaviour, Enemy
             tileToHitDiff.x = tileToHitDiff.x - this.transform.position.x;
             tileToHitDiff.y = tileToHitDiff.y - this.transform.position.y;
             tileToHit = Instantiate(hitTile, new Vector3(this.transform.position.x + tileToHitDiff.x, this.transform.position.y + tileToHitDiff.y, this.transform.position.z),Quaternion.identity);
+            tileToHit.transform.SetParent(this.transform);
         }
         cur = grid.objects[(int)Mathf.Floor(originalPosition.x), (int)Mathf.Round(originalPosition.y / 0.75f)];
         tile = cur.GetComponent(typeof(tileData)) as tileData;

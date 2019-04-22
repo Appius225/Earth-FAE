@@ -69,6 +69,9 @@ public class pushMortar : MonoBehaviour , Weapon
                                     yield return new WaitForEndOfFrame();
                                 }
                                 en.transform.position = temp.transform.position;
+                                temp.enemy = tile.enemy;
+                                tile.enemy = null;
+                                en.moveAttack(new Vector3(0.5f, 0.75f, 0.0f));
                             }
                         }
                     }
@@ -127,6 +130,9 @@ public class pushMortar : MonoBehaviour , Weapon
                                     yield return new WaitForEndOfFrame();
                                 }
                                 en.transform.position = temp.transform.position;
+                                temp.enemy = tile.enemy;
+                                tile.enemy = null;
+                                en.moveAttack(new Vector3(-0.5f, 0.75f, 0.0f));
                             }
                         }
                     }
@@ -188,6 +194,9 @@ public class pushMortar : MonoBehaviour , Weapon
                                     yield return new WaitForEndOfFrame();
                                 }
                                 en.transform.position = temp.transform.position;
+                                temp.enemy = tile.enemy;
+                                tile.enemy = null;
+                                en.moveAttack(new Vector3(0.5f, -0.75f, 0.0f));
                             }
                         }
                     }
@@ -246,6 +255,9 @@ public class pushMortar : MonoBehaviour , Weapon
                                     yield return new WaitForEndOfFrame();
                                 }
                                 en.transform.position = temp.transform.position;
+                                temp.enemy = tile.enemy;
+                                tile.enemy = null;
+                                en.moveAttack(new Vector3(-0.5f, -0.75f, 0.0f));
                             }
                         }
                     }
@@ -307,6 +319,9 @@ public class pushMortar : MonoBehaviour , Weapon
                                     yield return new WaitForEndOfFrame();
                                 }
                                 en.transform.position = temp.transform.position;
+                                temp.enemy = tile.enemy;
+                                tile.enemy = null;
+                                en.moveAttack(new Vector3(1.0f, 0.0f, 0.0f));
                             }
                         }
                     }
@@ -365,6 +380,9 @@ public class pushMortar : MonoBehaviour , Weapon
                                     yield return new WaitForEndOfFrame();
                                 }
                                 en.transform.position = temp.transform.position;
+                                temp.enemy = tile.enemy;
+                                tile.enemy = null;
+                                en.moveAttack(new Vector3(-1.0f, 0.0f, 0.0f));
                             }
                         }
                     }
