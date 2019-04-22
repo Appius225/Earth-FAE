@@ -261,11 +261,6 @@ public class BoardManager : MonoBehaviour
             {
                 yield return new WaitForEndOfFrame();
             }
-            for(int j = 0; j < 3; j++)
-            {
-                Tank t = tanks[j].GetComponent(typeof(Tank)) as tank;
-                t.actions = 0;
-            }
             Destroy(endButton);
             fire();       //Implemented, but no animation
             waiting = true;

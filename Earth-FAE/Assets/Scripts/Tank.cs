@@ -70,7 +70,6 @@ public class Tank : MonoBehaviour
                 tile = grid.objects[(int)Mathf.Floor(prevMove[i].x), (int)Mathf.Round(prevMove[i].y / 0.75f)].GetComponent(typeof(tileData)) as tileData;
                 tile.tank = this;
                 this.transform.position = prevMove[i];
-                prevMove[i] = def;
             }
         }
     }
