@@ -54,6 +54,7 @@ public class BoardManager : MonoBehaviour
         GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");
         foreach (GameObject tank in tanks)
         {
+            (tank.GetComponent(typeof(Tank)) as Tank).hideMoveableTiles();
             (tank.GetComponent(typeof(Tank)) as Tank).showHittableTiles2();
         }
     }

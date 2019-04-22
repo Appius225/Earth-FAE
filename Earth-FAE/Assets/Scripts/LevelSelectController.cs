@@ -10,11 +10,11 @@ public class LevelSelectController : MonoBehaviour
     public GameObject[] tanks;
     private int[] tankLoad = new int[3];
     private GameObject[] iTank = new GameObject[3];
-    private int[] tank1 = new int[2];
+    public int[] tank1 = new int[2];
     private int weap1Num = 0;
-    private int[] tank2 = new int[2];
+    public int[] tank2 = new int[2];
     private int weap2Num = 0;
-    private int[] tank3 = new int[2];
+    public int[] tank3 = new int[2];
     private int weap3Num = 0;
 
     public void loadTank1(int var)
