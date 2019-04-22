@@ -32,7 +32,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] enemyFabs;
 
     public Boolean turnEnded;
-    public GameObject endTurn;
+   // public GameObject endTurn;
 
     Camera MainCamera;
     public static Vector3 screenCenter;
@@ -246,7 +246,7 @@ public class BoardManager : MonoBehaviour
     }
     public void endTurnButton()
     {
-
+        turnEnded = true;
     }
     IEnumerator turn()
     {
@@ -254,14 +254,14 @@ public class BoardManager : MonoBehaviour
         {
             yield return new WaitForEndOfFrame();
         }
-        GameObject endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+        //GameObject endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
         for(int i = 0; i < 5; i++)
         {
             while (!turnEnded)
             {
                 yield return new WaitForEndOfFrame();
             }
-            Destroy(endButton);
+            //Destroy(endButton);
             fire();       //Implemented, but no animation
             waiting = true;
             StartCoroutine(enemyAttacks());
@@ -295,7 +295,7 @@ public class BoardManager : MonoBehaviour
                     yield return new WaitForEndOfFrame();
                 }*/
                 turnEnded = false;
-                endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
+                //endButton = Instantiate(endTurn, new Vector3(screenCenter.x, 0.75f * rows + 0.5f, 0.0f), Quaternion.identity) as GameObject;
                 for(int j = 0; j < 3; j++)
                 {
                     (tanks[j].GetComponent(typeof(Tank)) as Tank).actions = (tanks[j].GetComponent(typeof(Tank)) as Tank).maxActions;
