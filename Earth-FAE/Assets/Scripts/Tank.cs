@@ -301,7 +301,7 @@ public class Tank : MonoBehaviour
             {
                 for (int j = 0; j < hitTiles.GetLength(1); j++)
                 {
-                    if (hitTiles[i, j] != null)
+                    if (hitTiles[i, j])
                     {
                         if (i % 2 == 1)
                         {

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public static class metadata
 {
-    private static Tank[] tanks = { new Tank(), new Tank(), new Tank() };
+    private static GameObject[] tanks;
     private static float difficulty = 2.0f;
-    public static Tank[] Tanks
+    public static GameObject[] Tanks
     {
         get
         {
