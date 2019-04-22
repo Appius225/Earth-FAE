@@ -345,7 +345,7 @@ public class Tank : MonoBehaviour
     }
     void OnMouseDown()
     {
-        if (actions > 2)
+        if (actions > 0)
         {
             GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");
             if (tanks.GetLength(0) > 0)
@@ -375,37 +375,6 @@ public class Tank : MonoBehaviour
                 }
             }
             showMovableTiles();
-        }
-        else if(actions > 1)
-        {
-            GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");
-            if (tanks.GetLength(0) > 0)
-            {
-                foreach (GameObject temp in tanks)
-                {
-                    Tank t = temp.GetComponent(typeof(Tank)) as Tank;
-                    t.hideMoveableTiles();
-                }
-            }
-            tanks = GameObject.FindGameObjectsWithTag("Firing1");
-            if (tanks.GetLength(0) > 0)
-            {
-                foreach (GameObject temp in tanks)
-                {
-                    Tank t = temp.GetComponent(typeof(Tank)) as Tank;
-                    t.removeHitTiles();
-                }
-            }
-            tanks = GameObject.FindGameObjectsWithTag("Firing2");
-            if (tanks.GetLength(0) > 0)
-            {
-                foreach (GameObject temp in tanks)
-                {
-                    Tank t = temp.GetComponent(typeof(Tank)) as Tank;
-                    t.removeHitTiles();
-                }
-            }
-            showHittableTiles1();
         }
     }
     public void damage(int d)

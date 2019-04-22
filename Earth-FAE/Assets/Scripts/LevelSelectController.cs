@@ -73,7 +73,7 @@ public class LevelSelectController : MonoBehaviour
                 }
                 else if (tank1[0] == 1)
                 {
-
+                    t.weap1 = new pushMortar();
                 }
                 else
                 {
@@ -86,14 +86,14 @@ public class LevelSelectController : MonoBehaviour
                 }
                 else if (tank1[1] == 1)
                 {
-
+                    t.weap2 = new pushMortar();
                 }
                 else
                 {
 
                 }
             }
-            else if (i == 2) //tank 2
+            else if (i == 1) //tank 2
             {
                 if (tank2[0] == 0) //weapon 1 initialization
                 {
@@ -101,7 +101,7 @@ public class LevelSelectController : MonoBehaviour
                 }
                 else if (tank2[0] == 1)
                 {
-
+                    t.weap1 = new pushMortar();
                 }
                 else
                 {
@@ -114,7 +114,7 @@ public class LevelSelectController : MonoBehaviour
                 }
                 else if (tank2[1] == 1)
                 {
-
+                    t.weap2 = new pushMortar();
                 }
                 else
                 {
@@ -129,7 +129,7 @@ public class LevelSelectController : MonoBehaviour
                 }
                 else if (tank3[0] == 1)
                 {
-
+                    t.weap1 = new pushMortar();
                 }
                 else
                 {
@@ -142,7 +142,7 @@ public class LevelSelectController : MonoBehaviour
                 }
                 else if (tank3[1] == 1)
                 {
-
+                    t.weap2 = new pushMortar();
                 }
                 else
                 {
