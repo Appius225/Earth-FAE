@@ -410,7 +410,6 @@ public class Tank : MonoBehaviour
         for (int i = 1; i <= d && health > 0; i++)
         {
             health--;
-            healthBar.fillAmount = health / maxHealth;
         }
         if (health == 0)
             this.die();
