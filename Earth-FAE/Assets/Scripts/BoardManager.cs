@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BoardManager : MonoBehaviour
 {
@@ -417,6 +418,19 @@ public class BoardManager : MonoBehaviour
             }
             else
             {
+                difficulty = difficulty + 0.2f * (float)(cityHealth / 10);
+                metadata.Difficulty = difficulty;
+                int[] lvls = metadata.LevelsDone;
+                bool done = false;
+                for(int j = 0; j < lvls.Length && !done; j++)
+                {
+                    if (lvls[j] == 0)
+                    {
+                        done = true;
+                        lvls[j] = SceneManager.GetActiveScene().buildIndex;
+                    }
+                }
+                SceneManager.LoadScene(1);
                 //traverse back to selection scene
             }
         }
@@ -493,11 +507,11 @@ public class BoardManager : MonoBehaviour
     IEnumerator enemyAttacks()
     {
         tileData tile;
-        for (int i = 0; i < columns; i++)
+        for (int i = 0; i < rows; i++)
         {
-            for (int j = 0; j < rows; j++)
+            for (int j = 0; j < columns; j++)
             {
-                tile = objects[i, j].GetComponent(typeof(tileData)) as tileData;
+                tile = objects[j, i].GetComponent(typeof(tileData)) as tileData;
                 if (tile.enemy != null)
                 {
                     tile.enemy.isWaiting = true;

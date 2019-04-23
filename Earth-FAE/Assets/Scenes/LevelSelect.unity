@@ -1797,7 +1797,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 696871020}
-        m_MethodName: tank1Weap
+        m_MethodName: tank3Weap
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1895,6 +1895,20 @@ MonoBehaviour:
   - {fileID: 6443491495700026576, guid: 9827ca524e8d93243b07921fbc7f374a, type: 3}
   - {fileID: 4257811158126429931, guid: cefa63de3f88ed3418749df922578c84, type: 3}
   - {fileID: 7866060485276097981, guid: d9cac7803fbac0c4eb5d3dfc71832790, type: 3}
+  tank1: 0000000000000000
+  tank2: 0000000000000000
+  tank3: 0000000000000000
+  buttons:
+  - {fileID: 908200418}
+  - {fileID: 339572670}
+  - {fileID: 1272996315}
+  - {fileID: 2101403490}
+  - {fileID: 1386888928}
+  - {fileID: 1149211753}
+  - {fileID: 276519866}
+  - {fileID: 2110398211}
+  - {fileID: 1737481560}
+  - {fileID: 1164940456}
 --- !u!1 &721838121
 GameObject:
   m_ObjectHideFlags: 0
@@ -2628,7 +2642,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 696871020}
-        m_MethodName: tank1Weap
+        m_MethodName: tank2Weap
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -6,6 +6,18 @@ public static class metadata
 {
     private static GameObject[] tanks = new GameObject[3];
     private static float difficulty = 2.0f;
+    private static int[] levelsDone = new int[10];
+    public static int[] LevelsDone
+    {
+        get
+        {
+            return levelsDone;
+        }
+        set
+        {
+            levelsDone = value;
+        }
+    }
     public static GameObject[] Tanks
     {
         get

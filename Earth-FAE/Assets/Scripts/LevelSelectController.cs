@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LevelSelectController : MonoBehaviour
 {
 
-    private int level;
+    public int level;
     public GameObject[] tanks;
     private int[] tankLoad = new int[3];
     private GameObject[] iTank = new GameObject[3];
@@ -16,6 +17,8 @@ public class LevelSelectController : MonoBehaviour
     private int weap2Num = 0;
     public int[] tank3 = new int[2];
     private int weap3Num = 0;
+    public GameObject[] buttons;
+    private int[] lvls;
 
     public void loadTank1(int var)
     {
@@ -157,17 +160,34 @@ public class LevelSelectController : MonoBehaviour
     }
     public void LoadScene(int level)
     {
-        this.level = level;
+        bool found = false;
+        for (int i = 0; i < lvls.Length && !found; i++)
+        {
+            if (lvls[i] == level)
+            {
+                found = true;
+            }
+        }
+        if (!found)
+        {
+            this.level = level;
+        }
     }
 
-    void awake()
+    void Awake()
     {
-        for(int i = 0; i < 3; i++)
+        lvls = metadata.LevelsDone;
+        bool full = true;
+        for(int i = 0; i < lvls.Length; i++)
         {
-            for(int j = 0; j < tanks.Length; j++)
+            if (lvls[i] == 0)
             {
-
+                full = false;
             }
+        }
+        if (full)
+        {
+            //win condition
         }
     }
 }
