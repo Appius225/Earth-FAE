@@ -23,6 +23,9 @@ public class Tank : MonoBehaviour
     private bool hitTilesDisp = false;
     public Vector3[] prevMove;
     public Image healthBar;
+    public AudioSource reparing;
+    public AudioSource firing;
+    public AudioSource exploding;
 
     void Update()
     {
@@ -84,6 +87,8 @@ public class Tank : MonoBehaviour
         {
             actions--;
             health++;
+            AudioSource audio = GetComponent<AudioSource>();
+            reparing.Play();
             Vector3 pos = this.transform.position;
             int x = (int)Mathf.Floor(pos.x);
             int y = (int)Mathf.Round(pos.y / 0.75f);
@@ -287,7 +292,7 @@ public class Tank : MonoBehaviour
             this.tag = "Untagged";
             removeHitTiles();
             AudioSource audio = GetComponent<AudioSource>();
-            audio.Play();
+            firing.Play();
             StartCoroutine(weap1.fire(this.transform.position,target));
             actions -= 2;
             grid.flushUndo();
@@ -325,6 +330,8 @@ public class Tank : MonoBehaviour
         {
             this.tag = "Untagged";
             removeHitTiles();
+            AudioSource audio = GetComponent<AudioSource>();
+            audio.Play();
             StartCoroutine(weap2.fire(this.transform.position,target));
             actions -= 2;
             grid.flushUndo();
@@ -393,5 +400,7 @@ public class Tank : MonoBehaviour
     void die()
     {
         Destroy(this);
+        AudioSource audio = GetComponent<AudioSource>();
+        exploding.Play();
     }
 }
