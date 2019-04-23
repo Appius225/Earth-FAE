@@ -21,11 +21,7 @@ public class normalShot : MonoBehaviour , Weapon
                     if (tile.city)
                     {
                         //animation
-                        grid.cityHealth -= damage;
-                        if (grid.cityHealth <= 0)
-                        {
-                            //lose game
-                        }
+                        grid.damageCity(damage);
                         i = 100;
                     }
                     else if (tile.blocked)
@@ -50,6 +46,10 @@ public class normalShot : MonoBehaviour , Weapon
                 {
                     //miss animation
                 }
+                else
+                {
+                    //play audio
+                }
             }
             else
             {
@@ -60,11 +60,7 @@ public class normalShot : MonoBehaviour , Weapon
                     if (tile.city)
                     {
                         //animation
-                        grid.cityHealth -= damage;
-                        if (grid.cityHealth <= 0)
-                        {
-                            //lose game
-                        }
+                        grid.damageCity(damage);
                         i = -100;
                     }
                     else if (tile.blocked)
@@ -89,6 +85,10 @@ public class normalShot : MonoBehaviour , Weapon
                 {
                     //miss animation
                 }
+                else
+                {
+                    //play audio
+                }
             }
         }
         else if(target.x>pos.x && target.y > pos.y)
@@ -100,11 +100,7 @@ public class normalShot : MonoBehaviour , Weapon
                 if (tile.city)
                 {
                     //animation
-                    grid.cityHealth -= damage;
-                    if (grid.cityHealth <= 0)
-                    {
-                        //lose game
-                    }
+                    grid.damageCity(damage);
                     i = 100;
                 }
                 else if (tile.blocked)
@@ -128,6 +124,10 @@ public class normalShot : MonoBehaviour , Weapon
             if (i != 100)
             {
                 //miss animation
+            }
+            else
+            {
+                //play audio
             }
         }
         else if(target.x>pos.x && target.y < pos.y)
@@ -139,11 +139,7 @@ public class normalShot : MonoBehaviour , Weapon
                 if (tile.city)
                 {
                     //animation
-                    grid.cityHealth -= damage;
-                    if (grid.cityHealth <= 0)
-                    {
-                        //lose game
-                    }
+                    grid.damageCity(damage);
                     i = 100;
                 }
                 else if (tile.blocked)
@@ -167,6 +163,10 @@ public class normalShot : MonoBehaviour , Weapon
             if (i != 100)
             {
                 //miss animation
+            }
+            else
+            {
+                //play audio
             }
         }
         else if (target.x < pos.x && target.y > pos.y)
@@ -178,11 +178,7 @@ public class normalShot : MonoBehaviour , Weapon
                 if (tile.city)
                 {
                     //animation
-                    grid.cityHealth -= damage;
-                    if (grid.cityHealth <= 0)
-                    {
-                        //lose game
-                    }
+                    grid.damageCity(damage);
                     i = 100;
                 }
                 else if (tile.blocked)
@@ -206,6 +202,10 @@ public class normalShot : MonoBehaviour , Weapon
             if (i != 100)
             {
                 //miss animation
+            }
+            else
+            {
+                //play audio
             }
         }
         else
@@ -217,11 +217,7 @@ public class normalShot : MonoBehaviour , Weapon
                 if (tile.city)
                 {
                     //animation
-                    grid.cityHealth -= damage;
-                    if (grid.cityHealth <= 0)
-                    {
-                        //lose game
-                    }
+                    grid.damageCity(damage);
                     i = 100;
                 }
                 else if (tile.blocked)
@@ -245,6 +241,10 @@ public class normalShot : MonoBehaviour , Weapon
             if (i != 100)
             {
                 //miss animation
+            }
+            else
+            {
+                //play audio
             }
         }
         yield return new WaitForSeconds(0.1f);

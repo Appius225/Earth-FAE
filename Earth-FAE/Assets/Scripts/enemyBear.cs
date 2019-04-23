@@ -626,6 +626,7 @@ public class enemyBear : MonoBehaviour, Enemy
                     tile.tank.damage(dmg);
                 }
             }
+            //Play audio
             Destroy(tileToHit);
             yield return new WaitForSeconds(0.5f);
         }

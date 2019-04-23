@@ -95,5 +95,6 @@ MonoBehaviour:
   city: 0
   tank: {fileID: 0}
   onFire: 0
-  blocked: 0
+  blocked: 1
   isNull: 0
+  isWater: 0
