@@ -37,10 +37,26 @@ public class BoardManager : MonoBehaviour
     public Boolean turnEnded;
     //public GameObject endTurn;
 
+    //public Boolean winner = false, pass = false, fail = false;
+    public GameObject endGameUI, winGameUI, winLevelUI, loseLevelUI;
     Camera MainCamera;
     public static Vector3 screenCenter;
 
-
+    public void winLevel()
+    {
+        endGameUI.SetActive(true);
+        winLevelUI.SetActive(true);
+    }
+    public void loseLevel()
+    {
+        endGameUI.SetActive(true);
+        loseLevelUI.SetActive(true);
+    }
+    public void winGame()
+    {
+        endGameUI.SetActive(true);
+        winGameUI.SetActive(true);
+    }
     public void showFire1()
     {
         GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");
@@ -430,7 +446,8 @@ public class BoardManager : MonoBehaviour
                         lvls[j] = SceneManager.GetActiveScene().buildIndex;
                     }
                 }
-                SceneManager.LoadScene(1);
+                winLevel();
+                //SceneManager.LoadScene(1);
                 //traverse back to selection scene
             }
         }
@@ -561,8 +578,12 @@ public class BoardManager : MonoBehaviour
         }
         if(cityHealth == 0)
         {
-            //lose game
+            loseLevel();
         }
+    }
+    public void LoadScene(int level)
+    {
+        SceneManager.LoadScene(level);
     }
 
     void Awake()
