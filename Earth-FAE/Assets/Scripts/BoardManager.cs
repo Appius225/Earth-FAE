@@ -44,6 +44,11 @@ public class BoardManager : MonoBehaviour
 
     public void winLevel()
     {
+        metadata.Difficulty = 2.0f;
+        for(int i = 0; i < metadata.LevelsDone.Length; i++)
+        {
+            metadata.LevelsDone[i] = 0;
+        }
         endGameUI.SetActive(true);
         winLevelUI.SetActive(true);
     }
