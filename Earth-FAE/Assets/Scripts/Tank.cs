@@ -286,6 +286,8 @@ public class Tank : MonoBehaviour
         {
             this.tag = "Untagged";
             removeHitTiles();
+            AudioSource audio = GetComponent<AudioSource>();
+            audio.Play();
             StartCoroutine(weap1.fire(this.transform.position,target));
             actions -= 2;
             grid.flushUndo();
