@@ -609,7 +609,7 @@ public class enemyBear : MonoBehaviour, Enemy
         if(tileToHitDiff != def)
         {
             Vector3 target = new Vector3(this.transform.position.x + tileToHitDiff.x, this.transform.position.y + tileToHitDiff.y, 0.0f);
-            if (target.x > 0 && target.x < grid.getCols() && target.y > 0 && target.y < grid.getRows())
+            if (target.x >= 0 && target.x < grid.getCols() && target.y >= 0 && target.y < grid.getRows())
             {
                 GameObject hit = grid.objects[(int)Mathf.Floor(target.x), (int)Mathf.Round(target.y / 0.75f)];
                 tileData tile = hit.GetComponent(typeof(tileData)) as tileData;
