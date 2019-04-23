@@ -38,7 +38,7 @@ public class BoardManager : MonoBehaviour
     //public GameObject endTurn;
 
     //public Boolean winner = false, pass = false, fail = false;
-    public GameObject endGameUI, winGameUI, winLevelUI, loseLevelUI;
+    public GameObject endGameUI, winLevelUI, loseLevelUI;
     Camera MainCamera;
     public static Vector3 screenCenter;
 
@@ -52,11 +52,7 @@ public class BoardManager : MonoBehaviour
         endGameUI.SetActive(true);
         loseLevelUI.SetActive(true);
     }
-    public void winGame()
-    {
-        endGameUI.SetActive(true);
-        winGameUI.SetActive(true);
-    }
+    
     public void showFire1()
     {
         GameObject[] tanks = GameObject.FindGameObjectsWithTag("Moving");

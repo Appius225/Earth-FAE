@@ -19,6 +19,15 @@ public class LevelSelectController : MonoBehaviour
     private int weap3Num = 0;
     public GameObject[] buttons;
     private int[] lvls;
+    public GameObject endGameUI;
+
+    public void winGame()
+    {
+    
+            endGameUI.SetActive(true);
+          
+        
+    }
 
     public void loadTank1(int var)
     {
@@ -187,7 +196,7 @@ public class LevelSelectController : MonoBehaviour
         }
         if (full)
         {
-            //win condition
+            winGame();
         }
     }
 }
